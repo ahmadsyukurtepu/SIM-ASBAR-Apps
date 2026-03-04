@@ -54,61 +54,44 @@ function initDashboard() {
 }
 
 function renderMenu(userLevel) {
-    const grid = document.getElementById("dashboardGrid");
     const side = document.getElementById("mainMenu");
-    grid.innerHTML = ""; side.innerHTML = "";
+    const sideMobile = document.getElementById("mainMenuMobile");
+    side.innerHTML = "";
+    sideMobile.innerHTML = "";
 
-    menuData.forEach((menu, index) => {
+    menuData.forEach(menu => {
         const isAllowed = menu.level.some(l => l.toLowerCase() === userLevel.toLowerCase());
         
         if (isAllowed) {
-            // 1. RENDER GRID (Tampilan Tengah)
-            grid.innerHTML += `
-                <div class="col-6 col-md-4 col-lg-3">
-                    <div class="card card-menu h-100 shadow-sm border-0" onclick="location.href='${menu.path}'">
-                        <div class="card-body text-center p-4">
-                            <i class="fa ${menu.icon} fa-2x mb-3 text-success"></i>
-                            <h6 class="fw-bold m-0" style="font-size: 0.85rem;">${menu.title}</h6>
-                        </div>
-                    </div>
-                </div>`;
-
-            // 2. RENDER SIDEBAR (Dengan Dropdown jika Admin Utama & punya Sub)
-            // RENDER SIDEBAR (Admin Utama dengan Sub Menu)
+            let menuHTML = "";
             if (userLevel.toLowerCase() === "admin utama" && menu.hasSub) {
-                side.innerHTML += `
+                // Dropdown HTML (Sama seperti sebelumnya)
+                menuHTML = `
                     <li class="nav-item">
-                        <a class="nav-link text-white d-flex justify-content-between align-items-center collapsed" 
-                           data-bs-toggle="collapse" 
-                           href="#sub${menu.id}" 
-                           role="button" 
-                           aria-expanded="false">
-                            <span><i class="fa ${menu.icon} me-2 text-white-50"></i> ${menu.title}</span>
+                        <a class="nav-link text-white d-flex justify-content-between align-items-center" 
+                           data-bs-toggle="collapse" href="#sub${menu.id}">
+                            <span><i class="fa ${menu.icon} me-2"></i> ${menu.title}</span>
                             <i class="fa fa-chevron-down small"></i>
                         </a>
-                        <div class="collapse" id="sub${menu.id}">
-                            <ul class="nav flex-column" style="margin-left: 35px; border-left: 1px solid rgba(255,255,255,0.2);">
-                                ${menu.subs.map(s => `
-                                    <li class="nav-item">
-                                        <a class="nav-link small py-1" href="${s.path}" style="font-size: 0.8rem; color: rgba(255,255,255,0.8) !important;">
-                                            <i class="fa fa-circle me-2" style="font-size: 6px; vertical-align: middle;"></i> ${s.title}
-                                        </a>
-                                    </li>
-                                `).join('')}
+                        <div class="collapse ms-3" id="sub${menu.id}">
+                            <ul class="nav flex-column">
+                                ${menu.subs.map(s => `<li class="nav-item"><a class="nav-link small py-1" href="${s.path}">${s.title}</a></li>`).join('')}
                             </ul>
                         </div>
                     </li>`;
             } else {
-                // Menu biasa untuk non-admin utama atau menu tanpa sub
-                side.innerHTML += `
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="${menu.path}">
-                            <i class="fa ${menu.icon} me-2 text-white-50"></i> ${menu.title}
-                        </a>
-                    </li>`;
+                menuHTML = `<li class="nav-item"><a class="nav-link text-white" href="${menu.path}"><i class="fa ${menu.icon} me-2"></i> ${menu.title}</a></li>`;
             }
+            
+            side.innerHTML += menuHTML;
+            sideMobile.innerHTML += menuHTML;
         }
     });
-}
 
+    // Contoh Mengisi Angka Statistik (Nanti angka ini diambil dari GSheet)
+    document.getElementById("countSurat").innerText = "124";
+    document.getElementById("countDana").innerText = "45.5";
+    document.getElementById("countSantri").innerText = "350";
+    document.getElementById("countAlumni").innerText = "1.205"; // Total seluruhnya
+}
 window.onload = initDashboard;
