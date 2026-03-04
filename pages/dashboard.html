@@ -14,69 +14,69 @@
         <div class="text-center mb-4 pt-3">
             <img src="../assets/logo.png" class="mb-2 rounded-circle bg-white p-1" width="55" onerror="this.src='https://via.placeholder.com/55'">
             <h6 class="fw-bold text-white mb-0">SIM-ASBAR</h6>
-            <small class="text-white-50" id="userLevel">Memuat...</small>
+            <small class="text-white-50" id="userLevel">...</small>
         </div>
         
         <ul class="nav flex-column" id="mainMenu">
             </ul>
 
-        <hr class="text-white-50 mt-4">
-        <button onclick="logout()" class="btn btn-link text-white text-decoration-none w-100 text-start ps-3">
-            <i class="fa fa-power-off me-2"></i> <span>Keluar</span>
-        </button>
+        <div class="position-absolute bottom-0 w-100 pb-3">
+            <hr class="text-white-50 mx-3">
+            <button onclick="logout()" class="btn btn-link text-white text-decoration-none w-100 text-start ps-4">
+                <i class="fa fa-power-off me-2"></i> <span>Keluar</span>
+            </button>
+        </div>
     </nav>
 
-    <main>
+    <main class="fade-in">
         <div class="d-flex justify-content-between align-items-center mb-4 bg-white p-3 rounded-3 shadow-sm border-start border-success border-4">
             <div>
-                <h5 class="mb-0 fw-bold">Selamat Datang, <span id="userName" class="text-success">...</span>!</h5>
-                <small class="text-muted" id="userLembaga">Memuat unit kerja...</small>
+                <h5 class="mb-0 fw-bold">Ahlan, <span id="userName" class="text-success">...</span>!</h5>
+                <p class="small text-muted mb-0">Selamat datang di Sistem Informasi Manajemen As'adiyah.</p>
             </div>
-            <div class="d-none d-md-block">
-                <span class="badge bg-light text-dark border p-2">
-                    <i class="fa fa-calendar-alt me-1 text-success"></i> TA 2025/2026
-                </span>
+            <div class="text-end hide-mobile">
+                <div class="badge bg-success px-3 py-2">T.A. 2025/2026</div>
             </div>
         </div>
 
-        <h6 class="fw-bold mb-3"><i class="fa fa-chart-line me-2 text-success"></i>Ringkasan Data</h6>
         <div class="row g-3 mb-4">
-            <div class="col-6 col-md-4 col-lg-2">
-                <div class="card-custom text-center p-3">
-                    <small class="text-muted d-block">Surat</small>
-                    <h4 class="fw-bold mb-0 text-primary" id="countSurat">0</h4>
+            <div class="col-6 col-md-3">
+                <div class="bg-white p-3 rounded-3 shadow-sm text-center border-bottom border-primary border-3">
+                    <small class="text-muted d-block">Surat Masuk</small>
+                    <h3 class="fw-bold mb-0" id="statSurat">0</h3>
                 </div>
             </div>
-            <div class="col-6 col-md-4 col-lg-2">
-                <div class="card-custom text-center p-3">
-                    <small class="text-muted d-block">Kas (Jt)</small>
-                    <h4 class="fw-bold mb-0 text-success" id="countDana">0</h4>
+            <div class="col-6 col-md-3">
+                <div class="bg-white p-3 rounded-3 shadow-sm text-center border-bottom border-success border-3">
+                    <small class="text-muted d-block">Total Santri</small>
+                    <h3 class="fw-bold mb-0" id="statSantri">0</h3>
                 </div>
             </div>
-            <div class="col-6 col-md-4 col-lg-2">
-                <div class="card-custom text-center p-3">
-                    <small class="text-muted d-block">Pegawai</small>
-                    <h4 class="fw-bold mb-0 text-dark" id="countPegawai">0</h4>
+            <div class="col-6 col-md-3">
+                <div class="bg-white p-3 rounded-3 shadow-sm text-center border-bottom border-warning border-3">
+                    <small class="text-muted d-block">Data Alumni</small>
+                    <h3 class="fw-bold mb-0" id="statAlumni">0</h3>
                 </div>
             </div>
-            <div class="col-6 col-md-4 col-lg-2">
-                <div class="card-custom text-center p-3">
-                    <small class="text-muted d-block">Santri</small>
-                    <h4 class="fw-bold mb-0 text-info" id="countSantri">0</h4>
-                </div>
-            </div>
-            <div class="col-6 col-md-4 col-lg-2">
-                <div class="card-custom text-center p-3">
-                    <small class="text-muted d-block">Alumni</small>
-                    <h4 class="fw-bold mb-0 text-warning" id="countAlumni">0</h4>
+            <div class="col-6 col-md-3">
+                <div class="bg-white p-3 rounded-3 shadow-sm text-center border-bottom border-info border-3">
+                    <small class="text-muted d-block">Kas Lembaga</small>
+                    <h3 class="fw-bold mb-0" id="statKas">0</h3>
                 </div>
             </div>
         </div>
 
-        <div class="card-custom p-5 text-center text-muted">
-            <i class="fa fa-chart-bar fa-3x mb-3 opacity-25"></i>
-            <h6 class="fw-bold">Statistik Bulanan</h6>
-            <p class="small mb-0">Data grafik akan muncul otomatis berdasarkan aktivitas input harian Anda.</p>
+        <div class="card border-0 shadow-sm rounded-3">
+            <div class="card-body p-4">
+                <h6 class="fw-bold mb-3"><i class="fa fa-info-circle me-2 text-success"></i>Informasi Terbaru</h6>
+                <div class="alert alert-warning border-0 small">
+                    <i class="fa fa-bullhorn me-2"></i> Jangan lupa melakukan sinkronisasi data absen setiap hari sebelum pukul 17.00 WITA.
+                </div>
+                <div class="text-center py-5 text-muted">
+                    <i class="fa fa-chart-area fa-3x opacity-25 mb-3"></i>
+                    <p>Statistik harian akan muncul di sini setelah sistem mendeteksi input data terbaru.</p>
+                </div>
+            </div>
         </div>
     </main>
 
@@ -85,19 +85,20 @@
     <script src="../js/global.js"></script>
     
     <script>
-        // Memuat data statistik saat dashboard dibuka
-        async function loadDashboardStats() {
-            const res = await fetchModulData("STATISTIK");
-            if(res && res.status === "success") {
-                const d = res.data;
-                document.getElementById("countSurat").innerText = d.totalSurat || 0;
-                document.getElementById("countDana").innerText = d.totalKas || 0;
-                document.getElementById("countSantri").innerText = d.totalSantri || 0;
-                document.getElementById("countAlumni").innerText = d.totalAlumni || 0;
-                document.getElementById("countPegawai").innerText = d.totalPegawai || 0;
+        // Fungsi khusus dashboard untuk memanggil data statistik
+        async function muatDataDashboard() {
+            const result = await callAPI({ action: "getSmartData", modul: "STATISTIK" });
+            if(result && result.status === "success") {
+                const d = result.data;
+                document.getElementById("statSurat").innerText = d.totalSurat || 0;
+                document.getElementById("statSantri").innerText = d.totalSantri || 0;
+                document.getElementById("statAlumni").innerText = d.totalAlumni || 0;
+                document.getElementById("statKas").innerText = d.totalKas || 0;
             }
         }
-        window.addEventListener('DOMContentLoaded', loadDashboardStats);
+        
+        // Panggil saat halaman siap
+        document.addEventListener("DOMContentLoaded", muatDataDashboard);
     </script>
 </body>
 </html>
