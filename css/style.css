@@ -141,3 +141,26 @@ body {
     position: relative;
     z-index: 10;
 }
+/* Sidebar Mobile Styling */
+.offcanvas {
+    background: linear-gradient(180deg, var(--hijau-asadiyah) 0%, var(--hijau-tua) 100%) !important;
+}
+
+.offcanvas .nav-link {
+    font-size: 1.1rem;
+    padding: 15px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+/* Statistik Card */
+#statGrid .card {
+    transition: transform 0.3s;
+}
+#statGrid .card:hover {
+    transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+    #statGrid h3 { font-size: 1.2rem; }
+    #statGrid small { font-size: 0.7rem; }
+}
