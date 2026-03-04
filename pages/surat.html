@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Persuratan | SIM-ASBAR-Apps</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .badge-masuk { background-color: #e3f2fd; color: #0d47a1; border: 1px solid #bbdefb; }
+        .badge-keluar { background-color: #f1f8e9; color: #1b5e20; border: 1px solid #dcedc8; }
+        .btn-pdf { color: #dc3545; transition: 0.3s; }
+        .btn-pdf:hover { color: #a71d2a; transform: scale(1.2); }
+    </style>
+</head>
+<body>
+
+<div class="container-fluid">
+    <div class="row">
+        <nav class="col-md-3 col-lg-2 d-md-block sidebar collapse shadow">
+            <div class="text-center mb-4">
+                <h6 class="fw-bold text-white">SIM-ASBAR-Apps</h6>
+                <hr class="text-white-50">
+            </div>
+            <ul class="nav flex-column">
+                <li class="nav-item"><a class="nav-link" href="dashboard.html"><i class="fa fa-home me-2"></i> Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link active" href="surat.html"><i class="fa fa-envelope-open-text me-2"></i> Persuratan</a></li>
+            </ul>
+            <hr class="text-white-50">
+            <button onclick="location.href='dashboard.html'" class="btn btn-outline-light btn-sm w-100">Kembali</button>
+        </nav>
+
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
+            <div class="d-flex justify-content-between align-items-center mb-4 bg-white p-3 rounded shadow-sm border-start border-success border-4">
+                <div>
+                    <h4 class="mb-0 fw-bold">Manajemen Persuratan</h4>
+                    <small class="text-muted" id="subJudul">Yayasan As'adiyah Baru Orai Tempe</small>
+                </div>
+                <button class="btn btn-success" onclick="tambahSurat()"><i class="fa fa-plus-circle me-2"></i>Input Surat Baru</button>
+            </div>
+
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0" id="tabelSurat">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th class="px-3">Kategori</th>
+                                    <th>Tanggal</th>
+                                    <th>Nomor Surat</th>
+                                    <th>Perihal</th>
+                                    <th>Asal / Tujuan</th>
+                                    <th class="text-center">File</th>
+                                    <th class="text-center">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="isiTabelSurat">
+                                </tbody>
+                        </table>
+                        
+                        <div id="loader" class="text-center py-5">
+                            <div class="spinner-border text-success" role="status"></div>
+                            <p class="mt-2 text-muted">Sinkronisasi arsip digital...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<script src="../js/api.js"></script>
+<script>
+    const userData = JSON.parse(localStorage.getItem("user_simasbar"));
+    if (!userData) window.location.href = "../index.html";
+    document.getElementById("subJudul").innerText = "Arsip Digital Lembaga: " + userData.lembaga;
+
+    async function loadDataSurat() {
+        const tbody = document.getElementById("isiTabelSurat");
+        const loader = document.getElementById("loader");
+
+        // Memanggil API getSmartData untuk modul SURAT
+        const result = await fetchModulData("SURAT");
+        loader.style.display = "none";
+
+        if (result.status === "success") {
+            const data = result.data;
+            if (data.length <= 1) {
+                tbody.innerHTML = `<tr><td colspan="7" class="text-center py-4">Data masih kosong.</td></tr>`;
+                return;
+            }
+
+            let html = "";
+            for (let i = 1; i < data.length; i++) {
+                // Logika Badge Kategori
+                const kat = data[i][0] ? data[i][0].toUpperCase() : "";
+                const badgeClass = kat === "MASUK" ? "badge-masuk" : "badge-keluar";
+                
+                // Logika Tombol PDF
+                const pdfLink = data[i][5]; // Kolom F
+                const pdfBtn = pdfLink ? 
+                    `<a href="${pdfLink}" target="_blank" class="btn-pdf"><i class="fa fa-file-pdf fa-lg"></i></a>` : 
+                    `<span class="text-muted small">N/A</span>`;
+
+                html += `
+                    <tr>
+                        <td class="px-3"><span class="badge ${badgeClass} p-2">${kat}</span></td>
+                        <td class="small text-muted">${data[i][1] || '-'}</td>
+                        <td class="fw-bold">${data[i][2] || '-'}</td>
+                        <td>${data[i][3] || '-'}</td>
+                        <td>${data[i][4] || '-'}</td>
+                        <td class="text-center">${pdfBtn}</td>
+                        <td class="text-center">
+                            <button class="btn btn-sm btn-light border" onclick="editData(${i})"><i class="fa fa-edit"></i></button>
+                        </td>
+                    </tr>
+                `;
+            }
+            tbody.innerHTML = html;
+        } else {
+            tbody.innerHTML = `<tr><td colspan="7" class="text-center py-4 text-danger fst-italic fst-small">Gagal memuat: ${result.message}</td></tr>`;
+        }
+    }
+
+    window.onload = loadDataSurat;
+</script>
+</body>
+</html>
