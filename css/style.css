@@ -105,34 +105,28 @@ body {
 #dashboardGrid > div:nth-child(3) { animation-delay: 0.3s; }
 #dashboardGrid > div:nth-child(4) { animation-delay: 0.4s; }
 
-/* Style untuk Sub-Menu Dropdown di Dashboard */
-.sub-menu-box {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background: white;
-    z-index: 999;
-    border-radius: 10px;
-    padding: 10px;
-    border: 1px solid var(--hijau-asadiyah);
-    margin-top: 5px;
-    animation: slideDown 0.3s ease-out;
+/* Style untuk Sub-menu Sidebar */
+.nav-item .collapse {
+    border-left: 2px solid rgba(255, 255, 255, 0.2);
+    margin-left: 25px !important;
 }
 
-@keyframes slideDown {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
+.nav-item .nav-link small {
+    opacity: 0.8;
+    font-size: 0.8rem;
 }
 
-.sub-menu-box button {
-    font-size: 0.75rem;
-    font-weight: 600;
-    border: none;
-    padding: 8px 10px;
+.nav-item .nav-link small:hover {
+    opacity: 1;
+    color: var(--kuning-asadiyah) !important;
 }
 
-.sub-menu-box button:hover {
-    background-color: var(--hijau-asadiyah) !important;
-    color: white !important;
+/* Animasi Putar Panah saat Dropdown diklik */
+.nav-link[aria-expanded="true"] .fa-chevron-down {
+    transform: rotate(180deg);
+    transition: 0.3s;
+}
+
+.nav-link[aria-expanded="false"] .fa-chevron-down {
+    transition: 0.3s;
 }
