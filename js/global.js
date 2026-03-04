@@ -1,142 +1,129 @@
-document.addEventListener("DOMContentLoaded", () => {
-    const loginForm = document.getElementById("loginForm");
-
-    if (loginForm) {
-        loginForm.addEventListener("submit", async (e) => {
-            e.preventDefault();
-            const username = document.getElementById("username").value;
-            const password = document.getElementById("password").value;
-
-            // Memanggil fungsi dari api.js
-            const result = await fetchAPI({
-                action: "login",
-                username: username,
-                password: password
-            });
-
-            if (result.status === "success") {
-                // Simpan data user ke storage
-                localStorage.setItem("userSimAsbar", JSON.stringify(result.user));
-                alert("Selamat Datang, " + result.user.nama);
-                window.location.href = "pages/dashboard.html";
-            } else {
-                document.getElementById("message").innerText = result.message;
-            }
-        });
-    }
-});
-
-// Fungsi Logout
-function logout() {
-    localStorage.removeItem("userSimAsbar");
-    window.location.href = "../index.html";
-}
-function checkSidebarAccess() {
-    const user = JSON.parse(localStorage.getItem("userSimAsbar"));
-    if (!user) {
-        window.location.href = "../index.html";
-        return;
-    }
-
-    const level = user.level; // Lv1, Lv2, atau Lv3
-
-    // Contoh menyembunyikan menu Dokumen jika bukan Lv1
-    if (level !== "Lv1") {
-        const menuDokumen = document.getElementById("menu-dokumen");
-        if (menuDokumen) menuDokumen.style.display = "none";
-    }
-
-    // Tambahkan logika lainnya untuk level lainnya
-}
-document.addEventListener("DOMContentLoaded", () => {
-    const user = JSON.parse(localStorage.getItem("userSimAsbar"));
-
-    // 1. Cek apakah user sudah login
-    if (!user) {
-        // Jika tidak di halaman index, tendang ke login
-        if (!window.location.pathname.endsWith("index.html")) {
-            window.location.href = "../index.html";
-        }
-        return;
-    }
-
-    // 2. Update Tampilan Profil & Header
-    const welcomeText = document.getElementById("welcome-text");
-    const nameDisplay = document.getElementById("user-display-name");
-    const levelBadge = document.getElementById("user-level-badge");
-    const infoLembaga = document.getElementById("info-lembaga");
-
-    if (nameDisplay) nameDisplay.innerText = user.nama;
-    if (levelBadge) levelBadge.innerText = "Akses: " + user.level;
-    if (welcomeText) welcomeText.innerText = "Halo, " + user.nama;
-    if (infoLembaga) infoLembaga.innerText = "Lembaga: " + user.lembaga;
-
-    // 3. Filter Menu Berdasarkan Level (Lv1, Lv2, Lv3)
-    const menuItems = document.querySelectorAll(".menu-item");
-    menuItems.forEach(item => {
-        const allowedLevels = item.getAttribute("data-level").split(",");
-        if (!allowedLevels.includes(user.level)) {
-            item.style.display = "none";
-        }
-    });
-});
-
-// Fungsi Dropdown Profil
-function toggleDropdown() {
-    document.getElementById("profile-dropdown").classList.toggle("show");
-}
-
-// Fungsi Logout
-function logout() {
-    localStorage.removeItem("userSimAsbar");
-    window.location.href = "../index.html";
-}
-// Data User Simulasi (Nanti diisi dari proses Login)
-let currentUser = {
-    username: "admin_tpa",
-    role: "Lv2", // Contoh Role
-    nama: "Admin TPA Orai"
-};
+/**
+ * GLOBAL.JS - SIM-ASBAR
+ * Mengatur Navigasi, Login, dan Hak Akses
+ */
 
 document.addEventListener("DOMContentLoaded", () => {
-    terapkanHakAkses(currentUser.role);
-    renderProfil();
+    // 1. Cek Sesi Login saat halaman dimuat
+    const savedUser = localStorage.getItem('userSimAsbar');
     
-    // Event listener untuk toggle sidebar (Mobile Friendly)
-    document.getElementById('sidebarCollapse').onclick = () => {
-        document.getElementById('sidebar').classList.toggle('active');
-    };
+    if (savedUser) {
+        const userData = JSON.parse(savedUser);
+        startApp(userData);
+    }
+
+    // 2. Event Listener Sidebar (Mobile)
+    const sidebarBtn = document.getElementById('sidebarCollapse');
+    if (sidebarBtn) {
+        sidebarBtn.onclick = () => {
+            document.getElementById('sidebar').classList.toggle('active');
+        };
+    }
 });
 
+// --- FUNGSI LOGIN ---
+async function prosesLogin() {
+    const userIn = document.getElementById('username').value;
+    const passIn = document.getElementById('password').value;
+    const msg = document.getElementById('login-msg');
+    const btn = document.getElementById('btn-login');
+
+    if (!userIn || !passIn) {
+        msg.innerText = "Isi username dan password!";
+        return;
+    }
+
+    try {
+        btn.innerText = "Mengecek...";
+        btn.disabled = true;
+
+        // Memanggil fungsi dari api.js untuk mengambil data GSheet
+        const users = await fetchData('DAFTAR_USER');
+
+        if (users) {
+            // Cocokkan data (Sesuaikan nama kolom GSheet: username & password)
+            const userFound = users.find(u => u.username == userIn && u.password == passIn);
+
+            if (userFound) {
+                // Simpan data ke localStorage
+                localStorage.setItem('userSimAsbar', JSON.stringify(userFound));
+                startApp(userFound);
+            } else {
+                msg.innerText = "Username atau Password salah!";
+                btn.innerText = "Masuk";
+                btn.disabled = false;
+            }
+        } else {
+            msg.innerText = "Gagal terhubung ke database.";
+            btn.innerText = "Masuk";
+            btn.disabled = false;
+        }
+    } catch (err) {
+        console.error("Login Error:", err);
+        msg.innerText = "Terjadi kesalahan koneksi.";
+        btn.innerText = "Masuk";
+        btn.disabled = false;
+    }
+}
+
+// --- JALANKAN APLIKASI ---
+function startApp(userData) {
+    // Sembunyikan login, tampilkan app
+    document.getElementById('login-screen').classList.add('hidden');
+    document.getElementById('main-app').classList.remove('hidden');
+
+    // Update info profil di header
+    document.getElementById('user-name').innerText = userData.nama;
+    const roleEl = document.getElementById('user-role');
+    if (roleEl) roleEl.innerText = "Akses: " + userData.role;
+
+    // Terapkan filter menu berdasarkan role (Lv1, Lv2, Lv3)
+    terapkanHakAkses(userData.role);
+
+    // Load halaman pertama kali
+    loadPage('dashboard');
+}
+
+// --- FILTER MENU BERDASARKAN ROLE ---
 function terapkanHakAkses(role) {
-    // Sembunyikan semua elemen yang punya atribut data-role
     const elemenTerbatas = document.querySelectorAll('[data-role]');
     
     elemenTerbatas.forEach(el => {
         const rolesAllowed = el.getAttribute('data-role').split(',');
         if (!rolesAllowed.includes(role)) {
-            el.style.display = 'none'; // Sembunyikan jika role tidak terdaftar
+            el.style.display = 'none';
+        } else {
+            el.style.display = 'block'; // Pastikan terlihat jika diizinkan
         }
     });
 }
 
-function renderProfil() {
-    document.getElementById('user-name').innerText = currentUser.nama;
-}
+// --- NAVIGASI HALAMAN (SPA) ---
 function loadPage(pageName) {
     const mainBody = document.getElementById('main-body');
-    
-    // Animasi loading sederhana
-    mainBody.innerHTML = "<p>Memuat data...</p>";
+    mainBody.innerHTML = `<div style="padding:20px;">Memuat halaman ${pageName}...</div>`;
 
     fetch(`pages/${pageName}.html`)
-        .then(response => response.text())
+        .then(response => {
+            if (!response.ok) throw new Error("Halaman tidak ditemukan");
+            return response.text();
+        })
         .then(html => {
             mainBody.innerHTML = html;
-            // Jalankan fungsi inisialisasi spesifik halaman jika ada
-            if (pageName === 'dokumen') initDokumen(); 
         })
         .catch(err => {
-            mainBody.innerHTML = "<p>Halaman tidak ditemukan.</p>";
+            mainBody.innerHTML = `<div style="padding:20px;">Halaman <b>${pageName}</b> belum tersedia.</div>`;
         });
+}
+
+// --- PROFIL DROPDOWN ---
+function toggleDropdownProfil() {
+    const dropdown = document.getElementById('profile-dropdown');
+    dropdown.classList.toggle('hidden');
+}
+
+// --- LOGOUT ---
+function logout() {
+    localStorage.removeItem('userSimAsbar');
+    location.reload();
 }
