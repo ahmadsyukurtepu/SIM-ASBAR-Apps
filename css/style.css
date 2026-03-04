@@ -4,6 +4,69 @@
     --kuning-asadiyah: #ffc107;
     --bg-light: #f4f7f6;
     --text-dark: #333;
+    --sidebar-width: 260px;
+}
+
+body { 
+    background-color: var(--bg-light); 
+    font-family: 'Segoe UI', sans-serif;
+    color: var(--text-dark);
+    display: flex; /* Untuk layout menyamping */
+}
+
+/* SIDEBAR FIX */
+.sidebar { 
+    width: var(--sidebar-width);
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    background: linear-gradient(180deg, var(--hijau-asadiyah) 0%, var(--hijau-tua) 100%); 
+    color: white; 
+    padding: 20px;
+    z-index: 1000;
+    overflow-y: auto;
+    transition: all 0.3s;
+}
+
+/* MAIN CONTENT ADJUSTMENT */
+main {
+    flex: 1;
+    margin-left: var(--sidebar-width);
+    padding: 30px;
+    transition: all 0.3s;
+}
+
+/* MODE MOBILE (Logo Only / Split Mode) */
+@media (max-width: 768px) {
+    :root { --sidebar-width: 70px; }
+    
+    .sidebar { padding: 15px 5px; text-align: center; }
+    
+    /* Sembunyikan semua teks di sidebar saat mobile */
+    .sidebar span, 
+    .sidebar .fa-chevron-down, 
+    .sidebar h6, 
+    .sidebar hr,
+    .sidebar small { 
+        display: none !important; 
+    }
+    
+    .sidebar .nav-link { padding: 15px 0; }
+    .sidebar .nav-link i { margin: 0 !important; font-size: 1.3rem; }
+    
+    main { padding: 15px; }
+}
+
+/* Rest of your Card & Badge Styles remain the same... */
+.nav-link { color: rgba(255,255,255,0.7) !important; margin-bottom: 5px; border-radius: 10px; padding: 12px 15px; transition: all 0.2s; font-weight: 500; }
+.nav-link:hover, .nav-link.active { color: white !important; background: rgba(255,255,255,0.15); }
+.card-menu { border: 1px solid rgba(0,0,0,0.05); border-radius: 18px; transition: all 0.3s; cursor: pointer; text-align: center; background: white; height: 100%; }
+.card-menu:hover { transform: translateY(-8px); box-shadow: 0 15px 30px rgba(26, 94, 32, 0.15); }
+:root {
+    --hijau-asadiyah: #1a5e20;
+    --hijau-tua: #0d3211;
+    --kuning-asadiyah: #ffc107;
+    --bg-light: #f4f7f6;
+    --text-dark: #333;
 }
 
 body { 

@@ -10,7 +10,7 @@ const menuData = [
         subs: [
             { title: "Persuratan TPA", path: "surat.html?lembaga=tpa" },
             { title: "Persuratan MDA", path: "surat.html?lembaga=mda" },
-            { title: "Persuratan Alumni", path: "surat.html?lembaga=alumni" } // Tambahan Alumni
+            { title: "Persuratan Alumni", path: "surat.html?lembaga=alumni" }
         ]
     },
     { 
@@ -23,7 +23,7 @@ const menuData = [
         subs: [
             { title: "Keuangan TPA", path: "keuangan.html?lembaga=tpa" },
             { title: "Keuangan MDA", path: "keuangan.html?lembaga=mda" },
-            { title: "Keuangan Alumni", path: "keuangan.html?lembaga=alumni" } // Tambahan Alumni
+            { title: "Keuangan Alumni", path: "keuangan.html?lembaga=alumni" }
         ]
     },
     { id: "PEGAWAI", title: "Data Pegawai", icon: "fa-id-card", path: "pegawai.html", level: ["Admin Utama", "Admin Lembaga"] },
@@ -47,23 +47,21 @@ function initDashboard() {
     const rawData = localStorage.getItem("user_simasbar");
     if (!rawData) { window.location.href = "../index.html"; return; }
     const userData = JSON.parse(rawData);
-    // Di dalam fungsi initDashboard()
-const userNameEl = document.getElementById("userName");
-if (userNameEl) userNameEl.innerText = userData.nama;
 
-const userLevelEl = document.getElementById("userLevel");
-if (userLevelEl) userLevelEl.innerText = userData.level;
+    // Pengaman: Hanya update elemen jika ID-nya ada di halaman tersebut
+    const elId = {
+        userName: document.getElementById("userName"),
+        userLevel: document.getElementById("userLevel"),
+        userLembaga: document.getElementById("userLembaga"),
+        nameMob: document.getElementById("userNameMobile"),
+        lembMob: document.getElementById("userLembagaMobile")
+    };
 
-    // Update Profil Desktop
-    document.getElementById("userName").innerText = userData.nama;
-    document.getElementById("userLevel").innerText = userData.level;
-    document.getElementById("userLembaga").innerText = userData.lembaga;
-
-    // Update Profil Mobile (Jika elemennya ada di HTML)
-    const nameMob = document.getElementById("userNameMobile");
-    const lembMob = document.getElementById("userLembagaMobile");
-    if(nameMob) nameMob.innerText = userData.nama;
-    if(lembMob) lembMob.innerText = userData.lembaga;
+    if(elId.userName) elId.userName.innerText = userData.nama;
+    if(elId.userLevel) elId.userLevel.innerText = userData.level;
+    if(elId.userLembaga) elId.userLembaga.innerText = userData.lembaga;
+    if(elId.nameMob) elId.nameMob.innerText = userData.nama;
+    if(elId.lembMob) elId.lembMob.innerText = userData.lembaga;
 
     renderMenu(userData.level);
 }
@@ -74,22 +72,20 @@ function renderMenu(userLevel) {
 
     side.innerHTML = "";
     const userLevelClean = userLevel.toLowerCase();
+    const currentPath = window.location.pathname;
 
     menuData.forEach(menu => {
         const isAllowed = menu.level.some(l => l.toLowerCase() === userLevelClean);
-        
         if (isAllowed) {
             let menuHTML = "";
-            
-            // Highlight menu aktif berdasarkan URL
-            const isActive = window.location.pathname.includes(menu.path) ? "active" : "";
+            const isActive = currentPath.includes(menu.path) ? "active" : "";
 
             if (userLevelClean === "admin utama" && menu.hasSub) {
                 menuHTML = `
                     <li class="nav-item">
                         <a class="nav-link text-white d-flex justify-content-between align-items-center collapsed ${isActive}" 
                            data-bs-toggle="collapse" href="#sub${menu.id}">
-                            <span><i class="fa ${menu.icon} me-2 text-white-50"></i> ${menu.title}</span>
+                            <span><i class="fa ${menu.icon} me-2 text-white-50"></i> <span>${menu.title}</span></span>
                             <i class="fa fa-chevron-down small"></i>
                         </a>
                         <div class="collapse ms-3" id="sub${menu.id}">
@@ -114,11 +110,6 @@ function renderMenu(userLevel) {
             side.innerHTML += menuHTML;
         }
     });
-}
-
-function logout() {
-    localStorage.removeItem("user_simasbar");
-    window.location.href = "../index.html";
 }
 
 window.onload = initDashboard;
