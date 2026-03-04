@@ -7,228 +7,82 @@
     --sidebar-width: 260px;
 }
 
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
 body { 
     background-color: var(--bg-light); 
     font-family: 'Segoe UI', sans-serif;
     color: var(--text-dark);
-    display: flex; /* Untuk layout menyamping */
+    display: flex; /* Membuat sidebar dan main sejajar */
+    min-height: 100vh;
 }
 
-/* SIDEBAR FIX */
+/* --- SIDEBAR --- */
 .sidebar { 
     width: var(--sidebar-width);
-    position: fixed;
-    top: 0; left: 0; bottom: 0;
+    height: 100vh;
+    position: fixed; /* Tetap di posisi meski di-scroll */
+    top: 0; left: 0;
     background: linear-gradient(180deg, var(--hijau-asadiyah) 0%, var(--hijau-tua) 100%); 
     color: white; 
-    padding: 20px;
+    padding: 20px 15px;
+    transition: all 0.3s ease;
     z-index: 1000;
     overflow-y: auto;
-    transition: all 0.3s;
 }
 
-/* MAIN CONTENT ADJUSTMENT */
+/* --- KONTEN UTAMA --- */
 main {
     flex: 1;
-    margin-left: var(--sidebar-width);
-    padding: 30px;
-    transition: all 0.3s;
+    margin-left: var(--sidebar-width); /* Memberi ruang agar tidak tertutup sidebar */
+    padding: 25px;
+    transition: all 0.3s ease;
 }
 
-/* MODE MOBILE (Logo Only / Split Mode) */
-@media (max-width: 768px) {
-    :root { --sidebar-width: 70px; }
-    
-    .sidebar { padding: 15px 5px; text-align: center; }
-    
-    /* Sembunyikan semua teks di sidebar saat mobile */
-    .sidebar span, 
-    .sidebar .fa-chevron-down, 
-    .sidebar h6, 
-    .sidebar hr,
-    .sidebar small { 
-        display: none !important; 
-    }
-    
-    .sidebar .nav-link { padding: 15px 0; }
-    .sidebar .nav-link i { margin: 0 !important; font-size: 1.3rem; }
-    
-    main { padding: 15px; }
-}
-
-/* Rest of your Card & Badge Styles remain the same... */
-.nav-link { color: rgba(255,255,255,0.7) !important; margin-bottom: 5px; border-radius: 10px; padding: 12px 15px; transition: all 0.2s; font-weight: 500; }
-.nav-link:hover, .nav-link.active { color: white !important; background: rgba(255,255,255,0.15); }
-.card-menu { border: 1px solid rgba(0,0,0,0.05); border-radius: 18px; transition: all 0.3s; cursor: pointer; text-align: center; background: white; height: 100%; }
-.card-menu:hover { transform: translateY(-8px); box-shadow: 0 15px 30px rgba(26, 94, 32, 0.15); }
-:root {
-    --hijau-asadiyah: #1a5e20;
-    --hijau-tua: #0d3211;
-    --kuning-asadiyah: #ffc107;
-    --bg-light: #f4f7f6;
-    --text-dark: #333;
-}
-
-body { 
-    background-color: var(--bg-light); 
-    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    color: var(--text-dark);
-    overflow-x: hidden;
-}
-
-/* --- SIDEBAR RESPONSIVE --- */
-.sidebar { 
-    min-height: 100vh; 
-    background: linear-gradient(180deg, var(--hijau-asadiyah) 0%, var(--hijau-tua) 100%); 
-    color: white; 
-    padding: 20px;
-    box-shadow: 4px 0 10px rgba(0,0,0,0.1);
-}
-
-/* Agar Sidebar tidak hilang di Mobile tapi rapi */
-@media (max-width: 768px) {
-    .sidebar {
-        min-height: auto;
-        padding: 15px;
-    }
-}
-
+/* --- MENU NAVIGASI --- */
 .nav-link { 
     color: rgba(255,255,255,0.7) !important; 
     margin-bottom: 5px; 
     border-radius: 10px;
     padding: 12px 15px;
-    transition: all 0.2s;
-    font-weight: 500;
+    transition: 0.2s;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
 }
 
 .nav-link:hover, .nav-link.active { 
     color: white !important; 
     background: rgba(255,255,255,0.15); 
-    transform: translateX(5px);
 }
 
-/* --- CARD MENU (GRID) --- */
-.card-menu { 
-    border: 1px solid rgba(0,0,0,0.05); 
-    border-radius: 18px; 
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-    cursor: pointer; 
-    text-align: center;
-    background: white;
-    height: 100%;
+.nav-link i { width: 25px; font-size: 1.1rem; }
+
+/* --- RESPONSIVE MOBILE (SPLIT MODE) --- */
+@media (max-width: 768px) {
+    :root { --sidebar-width: 75px; } /* Sidebar mengecil */
+
+    .sidebar span, 
+    .sidebar h6, 
+    .sidebar .fa-chevron-down, 
+    .sidebar small { 
+        display: none !important; /* Sembunyikan semua teks */
+    }
+
+    .sidebar { padding: 20px 5px; text-align: center; }
+    .nav-link { justify-content: center; padding: 15px 0; }
+    .nav-link i { margin: 0 !important; font-size: 1.4rem; }
+    
+    main { padding: 15px; }
 }
 
-.card-menu:hover { 
-    transform: translateY(-8px); 
-    box-shadow: 0 15px 30px rgba(26, 94, 32, 0.15); 
-    border-color: var(--hijau-asadiyah);
-}
-
-.card-menu i { 
-    color: var(--hijau-asadiyah); 
-    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
-}
-
-.card-menu h6 {
-    color: var(--text-dark);
-    font-size: 0.9rem;
-    margin-top: 10px;
-}
-
-/* --- HEADER & UTILITY --- */
-.header-profile {
+/* --- KOMPONEN TABEL & CARD --- */
+.card-custom {
     background: white;
     border-radius: 15px;
-    border-left: 5px solid var(--kuning-asadiyah);
+    border: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 
-/* Badge Custom */
-.badge-level {
-    background-color: var(--kuning-asadiyah);
-    color: #000;
-    font-weight: 600;
-    padding: 5px 12px;
-    border-radius: 20px;
-}
-
-/* Animasi sederhana saat halaman dimuat */
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-#dashboardGrid > div {
-    animation: fadeIn 0.5s ease backwards;
-}
-
-/* Loop animasi delay untuk tiap card */
-#dashboardGrid > div:nth-child(1) { animation-delay: 0.1s; }
-#dashboardGrid > div:nth-child(2) { animation-delay: 0.2s; }
-#dashboardGrid > div:nth-child(3) { animation-delay: 0.3s; }
-#dashboardGrid > div:nth-child(4) { animation-delay: 0.4s; }
-
-/* Style untuk Sub-menu Sidebar */
-.nav-item .collapse {
-    border-left: 2px solid rgba(255, 255, 255, 0.2);
-    margin-left: 25px !important;
-}
-
-.nav-item .nav-link small {
-    opacity: 0.8;
-    font-size: 0.8rem;
-}
-
-.nav-item .nav-link small:hover {
-    opacity: 1;
-    color: var(--kuning-asadiyah) !important;
-}
-
-/* Animasi Putar Panah saat Dropdown diklik */
-.nav-link[aria-expanded="true"] .fa-chevron-down {
-    transform: rotate(180deg);
-    transition: 0.3s;
-}
-
-.nav-link[aria-expanded="false"] .fa-chevron-down {
-    transition: 0.3s;
-}
-/* Pastikan sidebar bisa menampilkan menu ke bawah */
-.sidebar {
-    overflow-y: auto;
-}
-
-/* Mempertegas efek klik pada menu sidebar */
-.nav-link[data-bs-toggle="collapse"] {
-    cursor: pointer;
-    position: relative;
-    z-index: 10;
-}
-/* Sidebar Mobile Styling */
-.offcanvas {
-    background: linear-gradient(180deg, var(--hijau-asadiyah) 0%, var(--hijau-tua) 100%) !important;
-}
-
-.offcanvas .nav-link {
-    font-size: 1.1rem;
-    padding: 15px;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
-}
-
-/* Statistik Card */
-#statGrid .card {
-    transition: transform 0.3s;
-}
-#statGrid .card:hover {
-    transform: scale(1.05);
-}
-
-@media (max-width: 768px) {
-    #statGrid h3 { font-size: 1.2rem; }
-    #statGrid small { font-size: 0.7rem; }
-}
-@media (max-width: 768px) {
-    .sidebar { width: 70px; padding: 10px 5px; text-align: center; }
-    .sidebar .nav-link span, .sidebar .fa-chevron-down { display: none; } /* Sembunyikan teks */
-    main { margin-left: 70px; } /* Geser konten agar tidak tertutup sidebar */
-}
+.badge-masuk { background: #e3f2fd; color: #0d47a1; }
+.badge-keluar { background: #f1f8e9; color: #1b5e20; }
