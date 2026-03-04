@@ -1,15 +1,17 @@
-// Gantilah URL ini dengan URL Web App yang Anda salin tadi
-const API_URL = "https://script.google.com/macros/s/AKfycby0vYsgTAgCwgVngtqWdrhd2bKhsmSusMLcTL0fmXfhluXm30c1FD-hc3Iy2CFSpv52/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbwVvyAFPs2lkhXS3fbjEordrpg_ioSxG_usTv6zF4lUldSKmBcRQXEAxU615HfJ26LmtQ/exec"; // Tempel URL Web App Script di sini
 
-async function fetchAPI(data) {
+async function fetchData(dbKey) {
     try {
-        const response = await fetch(API_URL, {
-            method: "POST",
-            body: JSON.stringify(data)
-        });
-        return await response.json();
+        const response = await fetch(`${API_URL}?action=read&dbKey=${dbKey}`);
+        const result = await response.json();
+        if (result.status === "success") {
+            return result.data;
+        } else {
+            console.error("Error API:", result.message);
+            return null;
+        }
     } catch (error) {
-        console.error("Error API:", error);
-        return { status: "error", message: "Gagal terhubung ke server" };
+        console.error("Gagal mengambil data:", error);
+        return null;
     }
 }

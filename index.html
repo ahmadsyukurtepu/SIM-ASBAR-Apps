@@ -7,31 +7,83 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <div id="app">
-        <nav id="sidebar" class="active">
-            <div class="sidebar-header">
-                <h3>SIM-ASBAR</h3>
-            </div>
-            <ul class="list-unstyled components">
-                <li id="menu-dashboard">Dashboard</li>
-                <li id="menu-dokumen" class="role-lv1">Dokumen</li>
-                <li id="menu-surat">Persuratan</li>
-                </ul>
-        </nav>
 
-        <div id="content">
-            <header class="navbar">
-                <button type="button" id="sidebarCollapse">☰</button>
-                <div class="user-profile">
-                    <span id="user-name">Nama User</span>
-                    <div id="profile-icon">👤</div>
-                </div>
-            </header>
-            
-            <main id="main-body">
-                </main>
+    <div id="login-screen">
+        <div class="login-box">
+            <div class="login-logo">
+                <h2 style="color: var(--primary-green); margin-bottom: 5px;">SIM-ASBAR</h2>
+                <small>Yayasan As'adiyah Baru Orai Tempe</small>
+            </div>
+            <hr>
+            <p>Silakan Login untuk Melanjutkan</p>
+            <input type="text" id="username" placeholder="Username (NIK/NIP)">
+            <input type="password" id="password" placeholder="Password">
+            <button onclick="prosesLogin()" id="btn-login">Masuk</button>
+            <p id="login-msg" style="color: red; font-size: 12px; margin-top: 10px;"></p>
         </div>
     </div>
+
+    <div id="main-app" class="hidden">
+        <div id="app">
+            <nav id="sidebar">
+                <div class="sidebar-header">
+                    <h3>SIM-ASBAR</h3>
+                </div>
+                
+                <ul class="list-unstyled components">
+                    <li onclick="loadPage('dashboard')" class="menu-item">📊 Dashboard</li>
+                    
+                    <li onclick="loadPage('dokumen')" data-role="Lv1" class="menu-item">📁 Dokumen</li>
+                    
+                    <li class="has-submenu">
+                        <span class="submenu-title">✉️ Persuratan</span>
+                        <ul class="submenu">
+                            <li onclick="loadPage('surat-yayasan')" data-role="Lv1">Persuratan YAYASAN</li>
+                            <li onclick="loadPage('surat-tpa')" data-role="Lv1,Lv2">Persuratan TPA</li>
+                            <li onclick="loadPage('surat-mda')" data-role="Lv1,Lv2">Persuratan MDA</li>
+                            <li onclick="loadPage('surat-alumni')" data-role="Lv1,Lv2,Lv3">Persuratan Alumni</li>
+                        </ul>
+                    </li>
+
+                    <li class="has-submenu" data-role="Lv1,Lv2">
+                        <span class="submenu-title">👥 Data Santri</span>
+                        <ul class="submenu">
+                            <li onclick="loadPage('santri-tpa')">Data Santri TPA</li>
+                            <li onclick="loadPage('santri-mda')">Data Santri MDA</li>
+                        </ul>
+                    </li>
+
+                    <li onclick="loadPage('pegawai')" data-role="Lv1,Lv2" class="menu-item">👔 Data Pegawai</li>
+                    <li onclick="loadPage('alumni')" data-role="Lv1,Lv2,Lv3" class="menu-item">🎓 Data Alumni</li>
+                    <li onclick="loadPage('galeri')" class="menu-item">🖼️ Galeri</li>
+                </ul>
+            </nav>
+
+            <div id="content">
+                <header class="navbar">
+                    <button type="button" id="sidebarCollapse">☰</button>
+                    <div class="user-profile-wrapper">
+                        <div class="user-info">
+                            <span id="user-name">Memuat...</span>
+                            <small id="user-role" style="display:block; font-size: 10px; color: #666;"></small>
+                        </div>
+                        <div id="profile-btn" onclick="toggleDropdownProfil()" style="cursor:pointer;">
+                            <div id="profile-icon">👤</div>
+                        </div>
+                        <div id="profile-dropdown" class="hidden">
+                            <button onclick="loadPage('profil')">Lihat Profil</button>
+                            <button onclick="logout()" style="color: red;">Keluar</button>
+                        </div>
+                    </div>
+                </header>
+                
+                <main id="main-body">
+                    </main>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
     <script src="js/global.js"></script>
 </body>
 </html>

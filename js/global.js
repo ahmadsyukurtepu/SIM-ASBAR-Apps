@@ -91,3 +91,52 @@ function logout() {
     localStorage.removeItem("userSimAsbar");
     window.location.href = "../index.html";
 }
+// Data User Simulasi (Nanti diisi dari proses Login)
+let currentUser = {
+    username: "admin_tpa",
+    role: "Lv2", // Contoh Role
+    nama: "Admin TPA Orai"
+};
+
+document.addEventListener("DOMContentLoaded", () => {
+    terapkanHakAkses(currentUser.role);
+    renderProfil();
+    
+    // Event listener untuk toggle sidebar (Mobile Friendly)
+    document.getElementById('sidebarCollapse').onclick = () => {
+        document.getElementById('sidebar').classList.toggle('active');
+    };
+});
+
+function terapkanHakAkses(role) {
+    // Sembunyikan semua elemen yang punya atribut data-role
+    const elemenTerbatas = document.querySelectorAll('[data-role]');
+    
+    elemenTerbatas.forEach(el => {
+        const rolesAllowed = el.getAttribute('data-role').split(',');
+        if (!rolesAllowed.includes(role)) {
+            el.style.display = 'none'; // Sembunyikan jika role tidak terdaftar
+        }
+    });
+}
+
+function renderProfil() {
+    document.getElementById('user-name').innerText = currentUser.nama;
+}
+function loadPage(pageName) {
+    const mainBody = document.getElementById('main-body');
+    
+    // Animasi loading sederhana
+    mainBody.innerHTML = "<p>Memuat data...</p>";
+
+    fetch(`pages/${pageName}.html`)
+        .then(response => response.text())
+        .then(html => {
+            mainBody.innerHTML = html;
+            // Jalankan fungsi inisialisasi spesifik halaman jika ada
+            if (pageName === 'dokumen') initDokumen(); 
+        })
+        .catch(err => {
+            mainBody.innerHTML = "<p>Halaman tidak ditemukan.</p>";
+        });
+}
