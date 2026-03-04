@@ -1,104 +1,64 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard | SIM-ASBAR</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="../css/style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
-<body>
+<body class="bg-slate-50 flex h-screen overflow-hidden">
 
-    <nav class="sidebar shadow">
-        <div class="text-center mb-4 pt-3">
-            <img src="../assets/logo.png" class="mb-2 rounded-circle bg-white p-1" width="55" onerror="this.src='https://via.placeholder.com/55'">
-            <h6 class="fw-bold text-white mb-0">SIM-ASBAR</h6>
-            <small class="text-white-50" id="userLevel">...</small>
+    <aside class="w-64 bg-slate-900 text-slate-200 flex-shrink-0 flex flex-col transition-all duration-300">
+        <div class="p-6 text-center border-b border-slate-800">
+            <h1 class="text-xl font-bold text-white">SIM-ASBAR</h1>
+            <p id="labelLembaga" class="text-xs text-slate-400 mt-1 uppercase tracking-widest"></p>
         </div>
         
-        <ul class="nav flex-column" id="mainMenu">
-            </ul>
+        <nav id="sidebarMenu" class="flex-1 overflow-y-auto p-4 space-y-2">
+            </nav>
 
-        <div class="position-absolute bottom-0 w-100 pb-3">
-            <hr class="text-white-50 mx-3">
-            <button onclick="logout()" class="btn btn-link text-white text-decoration-none w-100 text-start ps-4">
-                <i class="fa fa-power-off me-2"></i> <span>Keluar</span>
+        <div class="p-4 bg-slate-800 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center font-bold text-white text-sm" id="userInitial">U</div>
+                <div>
+                    <p id="userName" class="text-xs font-semibold text-white truncate w-24"></p>
+                    <p id="userLevel" class="text-[10px] text-slate-400"></p>
+                </div>
+            </div>
+            <button onclick="logout()" class="text-slate-400 hover:text-red-400">
+                <i data-lucide="log-out" class="w-5 h-5"></i>
             </button>
         </div>
-    </nav>
+    </aside>
 
-    <main class="fade-in">
-        <div class="d-flex justify-content-between align-items-center mb-4 bg-white p-3 rounded-3 shadow-sm border-start border-success border-4">
-            <div>
-                <h5 class="mb-0 fw-bold">Ahlan, <span id="userName" class="text-success">...</span>!</h5>
-                <p class="small text-muted mb-0">Selamat datang di Sistem Informasi Manajemen As'adiyah.</p>
+    <main class="flex-1 flex flex-col">
+        <header class="h-16 bg-white border-b flex items-center justify-between px-8">
+            <h2 id="pageTitle" class="text-lg font-semibold text-slate-800">Dashboard</h2>
+            <div class="flex items-center space-x-4">
+                <button class="p-2 hover:bg-slate-100 rounded-full relative">
+                    <i data-lucide="bell" class="w-5 h-5 text-slate-600"></i>
+                    <span class="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full"></span>
+                </button>
+                <div class="h-8 w-[1px] bg-slate-200"></div>
+                <span id="currentDate" class="text-sm text-slate-500"></span>
             </div>
-            <div class="text-end hide-mobile">
-                <div class="badge bg-success px-3 py-2">T.A. 2025/2026</div>
-            </div>
-        </div>
+        </header>
 
-        <div class="row g-3 mb-4">
-            <div class="col-6 col-md-3">
-                <div class="bg-white p-3 rounded-3 shadow-sm text-center border-bottom border-primary border-3">
-                    <small class="text-muted d-block">Surat Masuk</small>
-                    <h3 class="fw-bold mb-0" id="statSurat">0</h3>
-                </div>
-            </div>
-            <div class="col-6 col-md-3">
-                <div class="bg-white p-3 rounded-3 shadow-sm text-center border-bottom border-success border-3">
-                    <small class="text-muted d-block">Total Santri</small>
-                    <h3 class="fw-bold mb-0" id="statSantri">0</h3>
-                </div>
-            </div>
-            <div class="col-6 col-md-3">
-                <div class="bg-white p-3 rounded-3 shadow-sm text-center border-bottom border-warning border-3">
-                    <small class="text-muted d-block">Data Alumni</small>
-                    <h3 class="fw-bold mb-0" id="statAlumni">0</h3>
-                </div>
-            </div>
-            <div class="col-6 col-md-3">
-                <div class="bg-white p-3 rounded-3 shadow-sm text-center border-bottom border-info border-3">
-                    <small class="text-muted d-block">Kas Lembaga</small>
-                    <h3 class="fw-bold mb-0" id="statKas">0</h3>
-                </div>
-            </div>
-        </div>
-
-        <div class="card border-0 shadow-sm rounded-3">
-            <div class="card-body p-4">
-                <h6 class="fw-bold mb-3"><i class="fa fa-info-circle me-2 text-success"></i>Informasi Terbaru</h6>
-                <div class="alert alert-warning border-0 small">
-                    <i class="fa fa-bullhorn me-2"></i> Jangan lupa melakukan sinkronisasi data absen setiap hari sebelum pukul 17.00 WITA.
-                </div>
-                <div class="text-center py-5 text-muted">
-                    <i class="fa fa-chart-area fa-3x opacity-25 mb-3"></i>
-                    <p>Statistik harian akan muncul di sini setelah sistem mendeteksi input data terbaru.</p>
+        <div id="content" class="p-8 overflow-y-auto">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="md:col-span-3 bg-gradient-to-r from-blue-600 to-indigo-700 p-8 rounded-2xl text-white shadow-lg">
+                    <h3 class="text-2xl font-bold mb-2">Selamat Datang, <span id="welcomeName">User</span>!</h3>
+                    <p class="opacity-80">Anda masuk sebagai <span id="welcomeLevel" class="font-semibold underline"></span>. Silakan pilih menu di samping untuk mengelola data.</p>
                 </div>
             </div>
         </div>
     </main>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="../js/api.js"></script>
     <script src="../js/global.js"></script>
-    
     <script>
-        // Fungsi khusus dashboard untuk memanggil data statistik
-        async function muatDataDashboard() {
-            const result = await callAPI({ action: "getSmartData", modul: "STATISTIK" });
-            if(result && result.status === "success") {
-                const d = result.data;
-                document.getElementById("statSurat").innerText = d.totalSurat || 0;
-                document.getElementById("statSantri").innerText = d.totalSantri || 0;
-                document.getElementById("statAlumni").innerText = d.totalAlumni || 0;
-                document.getElementById("statKas").innerText = d.totalKas || 0;
-            }
-        }
-        
-        // Panggil saat halaman siap
-        document.addEventListener("DOMContentLoaded", muatDataDashboard);
+        // Inisialisasi Icon
+        lucide.createIcons();
     </script>
 </body>
 </html>
