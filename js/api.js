@@ -4,7 +4,7 @@
  */
 
 // 1. GANTI DENGAN URL WEB APP APPS SCRIPT BAPAK (YANG BERAKHIRAN /exec)
-const SCRIPT_URL = "URL_APPS_SCRIPT_BAPAK_DISINI";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw6FLTUY_dbJ61-LZDoHPjs1qWmhP25xGpDq7fAbhTC0I6zjfjV95ZbS1kMaWJSFOwx5g/exec";
 
 /**
  * Fungsi Utama untuk mengambil data dari GSheet secara cerdas
