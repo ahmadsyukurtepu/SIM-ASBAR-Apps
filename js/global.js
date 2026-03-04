@@ -64,12 +64,9 @@ function initDashboard() {
 
 function renderMenu(userLevel) {
     const side = document.getElementById("mainMenu");
-    const sideMobile = document.getElementById("mainMenuMobile");
-    if(!side || !sideMobile) return;
+    if(!side) return;
 
     side.innerHTML = "";
-    sideMobile.innerHTML = "";
-
     const userLevelClean = userLevel.toLowerCase();
 
     menuData.forEach(menu => {
@@ -78,12 +75,14 @@ function renderMenu(userLevel) {
         if (isAllowed) {
             let menuHTML = "";
             
-            // Logika Dropdown untuk Admin Utama
+            // Highlight menu aktif berdasarkan URL
+            const isActive = window.location.pathname.includes(menu.path) ? "active" : "";
+
             if (userLevelClean === "admin utama" && menu.hasSub) {
                 menuHTML = `
                     <li class="nav-item">
-                        <a class="nav-link text-white d-flex justify-content-between align-items-center collapsed" 
-                           data-bs-toggle="collapse" href="#sub${menu.id}" role="button">
+                        <a class="nav-link text-white d-flex justify-content-between align-items-center collapsed ${isActive}" 
+                           data-bs-toggle="collapse" href="#sub${menu.id}">
                             <span><i class="fa ${menu.icon} me-2 text-white-50"></i> ${menu.title}</span>
                             <i class="fa fa-chevron-down small"></i>
                         </a>
@@ -92,36 +91,23 @@ function renderMenu(userLevel) {
                                 ${menu.subs.map(s => `
                                     <li class="nav-item">
                                         <a class="nav-link small py-1 text-white-50" href="${s.path}">
-                                            <i class="fa fa-circle me-2" style="font-size: 6px;"></i>${s.title}
+                                            <i class="fa fa-circle me-2" style="font-size: 6px;"></i><span>${s.title}</span>
                                         </a>
                                     </li>`).join('')}
                             </ul>
                         </div>
                     </li>`;
             } else {
-                // Menu Biasa (Tanpa Dropdown)
                 menuHTML = `
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="${menu.path}">
-                            <i class="fa ${menu.icon} me-2 text-white-50"></i> ${menu.title}
+                        <a class="nav-link text-white ${isActive}" href="${menu.path}">
+                            <i class="fa ${menu.icon} me-2 text-white-50"></i> <span>${menu.title}</span>
                         </a>
                     </li>`;
             }
-            
             side.innerHTML += menuHTML;
-            sideMobile.innerHTML += menuHTML;
         }
     });
-
-    // Mengisi Angka Statistik (Placeholder)
-    // Nanti ini akan dihubungkan ke getSmartData khusus statistik
-    if(document.getElementById("countSurat")) {
-        document.getElementById("countSurat").innerText = "124";
-        document.getElementById("countDana").innerText = "45.5";
-        document.getElementById("countPegawai").innerText = "28";
-        document.getElementById("countSantri").innerText = "350";
-        document.getElementById("countAlumni").innerText = "1.205";
-    }
 }
 
 function logout() {
