@@ -3,51 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dokumen Yayasan | SIM-ASBAR</title>
+    <title>Dokumen | SIM-ASBAR</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body class="bg-slate-50 flex h-screen overflow-hidden">
-
-    <aside id="sidebar-container" class="w-64 bg-slate-900 text-slate-200 flex-shrink-0 flex flex-col transition-all duration-300">
-        </aside>
-
-    <main class="flex-1 flex flex-col">
+    <main class="flex-1 flex flex-col overflow-hidden">
         <header class="h-16 bg-white border-b flex items-center justify-between px-8">
             <h2 class="text-lg font-semibold text-slate-800">Manajemen Dokumen</h2>
-            <div class="flex items-center space-x-4">
-                <button onclick="openModalTambah()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center shadow-sm">
-                    <i data-lucide="plus" class="w-4 h-4 mr-2"></i> Tambah Dokumen
-                </button>
-            </div>
+            <button onclick="toggleModal(true)" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition">
+                <i data-lucide="plus" class="w-4 h-4"></i>
+                <span>Tambah Dokumen</span>
+            </button>
         </header>
 
         <div class="p-8 overflow-y-auto">
-            <div class="bg-white rounded-xl shadow-sm border border-slate-200">
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse">
-                        <thead>
-                            <tr class="bg-slate-50 border-b border-slate-200">
-                                <th class="px-6 py-4 text-sm font-semibold text-slate-700">Kategori</th>
-                                <th class="px-6 py-4 text-sm font-semibold text-slate-700">Nomor</th>
-                                <th class="px-6 py-4 text-sm font-semibold text-slate-700">Tanggal</th>
-                                <th class="px-6 py-4 text-sm font-semibold text-slate-700">Judul Dokumen</th>
-                                <th class="px-6 py-4 text-sm font-semibold text-slate-700 text-center">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tabelDokumen" class="divide-y divide-slate-100">
-                            <tr>
-                                <td colspan="5" class="px-6 py-10 text-center text-slate-400">Memuat data...</td>
-                            </tr>
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                <table class="w-full text-left">
+                    <thead class="bg-slate-50 border-b border-slate-200">
+                        <tr>
+                            <th class="px-6 py-4 text-sm font-semibold text-slate-600">Kategori</th>
+                            <th class="px-6 py-4 text-sm font-semibold text-slate-600">Nomor</th>
+                            <th class="px-6 py-4 text-sm font-semibold text-slate-600">Tanggal</th>
+                            <th class="px-6 py-4 text-sm font-semibold text-slate-600">Judul</th>
+                            <th class="px-6 py-4 text-sm font-semibold text-slate-600 text-center">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody" class="divide-y divide-slate-100 text-sm text-slate-700">
                         </tbody>
-                    </table>
-                </div>
+                </table>
             </div>
         </div>
     </main>
 
+    <div id="modalInput" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-2xl w-full max-w-md p-6 shadow-2xl">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold text-slate-800">Upload Dokumen</h3>
+                <button onclick="toggleModal(false)" class="text-slate-400 hover:text-slate-600"><i data-lucide="x"></i></button>
+            </div>
+            <form id="formDoc" class="space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Kategori</label>
+                        <select id="kategori" class="w-full border p-2 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                            <option>SK</option>
+                            <option>Sertifikat</option>
+                            <option>Laporan</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Tanggal</label>
+                        <input type="date" id="tanggal" required class="w-full border p-2 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Nomor Dokumen</label>
+                    <input type="text" id="nomor" placeholder="Contoh: 001/YAY/2024" required class="w-full border p-2 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Judul Dokumen</label>
+                    <input type="text" id="judul" placeholder="Nama Dokumen" required class="w-full border p-2 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase mb-1">File PDF</label>
+                    <input type="file" id="filePdf" accept="application/pdf" required class="w-full text-sm">
+                </div>
+                <button type="submit" id="btnSimpan" class="w-full bg-blue-600 text-white py-3 rounded-xl font-bold shadow-lg hover:bg-blue-700 transition">Simpan & Upload</button>
+            </form>
+        </div>
+    </div>
+
     <script src="../js/api.js"></script>
-    <script src="../js/global.js"></script>
     <script src="../js/dokumen.js"></script>
     <script>lucide.createIcons();</script>
 </body>
