@@ -1,5 +1,5 @@
 // GANTI dengan URL Web App yang Anda dapatkan setelah Deploy di Google Apps Script
-const API_URL = "https://script.google.com/macros/s/AKfycbzgYO390noTul09XuVh5tnIlZeIgD8k6U6d5EyGFxSUoAzakdFNG-dq1H_2NpOmG__7vw/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbyrr0ho5ocfRvH2XzpK-5zJDxJxLsKj-veKmWDDViKLq4pY8lfTOeYu2-Q0zUe-EmVRNw/exec";
 
 async function postData(data) {
     try {
