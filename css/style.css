@@ -1,75 +1,29 @@
-:root {
-    --hijau-asadiyah: #1a5e20;
-    --hijau-tua: #0d3211;
-    --kuning-asadiyah: #ffc107;
-    --sidebar-width: 260px;
-    --sidebar-collapsed: 70px;
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+body { background: #f4f7f6; display: flex; }
+.container { display: flex; width: 100%; min-height: 100vh; }
+
+/* Sidebar */
+.sidebar { width: 250px; background: #2c3e50; color: white; padding: 20px 0; }
+.sidebar-header { text-align: center; padding-bottom: 20px; border-bottom: 1px solid #34495e; }
+.sidebar-menu ul { list-style: none; margin-top: 20px; }
+.sidebar-menu li a { 
+    display: block; padding: 15px 25px; color: #bdc3c7; text-decoration: none; transition: 0.3s;
+}
+.sidebar-menu li a:hover, .sidebar-menu li a.active { background: #34495e; color: white; border-left: 4px solid #3498db; }
+
+/* Main Content */
+.main-content { flex: 1; padding: 0; }
+.top-header { 
+    background: white; padding: 15px 30px; display: flex; 
+    justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
 }
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
-
-body { 
-    background-color: #f4f7f6; 
-    font-family: 'Segoe UI', Roboto, sans-serif;
-    display: flex;
-    min-height: 100vh;
+/* Profile Dropdown */
+.user-profile { position: relative; cursor: pointer; }
+.profile-info { display: flex; align-items: center; gap: 10px; }
+.profile-info img { width: 35px; border-radius: 50%; }
+.dropdown-content { 
+    display: none; position: absolute; right: 0; background: white; 
+    min-width: 150px; box-shadow: 0 8px 16px rgba(0,0,0,0.2); padding: 12px; z-index: 1;
 }
-
-/* SIDEBAR: Terkunci di kiri, tidak boleh melompat */
-.sidebar { 
-    width: var(--sidebar-width);
-    background: linear-gradient(180deg, var(--hijau-asadiyah), var(--hijau-tua));
-    color: white;
-    position: fixed;
-    height: 100vh;
-    z-index: 1000;
-    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* MAIN: Langsung beri margin kiri agar tidak tertutup sidebar */
-main {
-    flex: 1;
-    margin-left: var(--sidebar-width);
-    padding: 25px;
-    min-width: 0; /* Mencegah konten meluber */
-    transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* MENU NAVIGASI */
-.nav-link {
-    color: rgba(255,255,255,0.7) !important;
-    padding: 12px 20px;
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    transition: 0.2s;
-    border-radius: 8px;
-    margin: 4px 10px;
-}
-
-.nav-link:hover, .nav-link.active {
-    background: rgba(255,255,255,0.1);
-    color: white !important;
-}
-
-.nav-link i { width: 30px; font-size: 1.2rem; }
-
-/* RESPONSIVE: Mode Ikon untuk HP */
-@media (max-width: 768px) {
-    .sidebar { width: var(--sidebar-collapsed); }
-    main { margin-left: var(--sidebar-collapsed); }
-    .sidebar span, .sidebar h6, .sidebar small, .sidebar .fa-chevron-down { 
-        display: none !important; 
-    }
-    .nav-link { justify-content: center; margin: 5px; padding: 15px 0; }
-}
-
-/* ANIMASI HALUS UNTUK KONTEN */
-.fade-in {
-    animation: fadeIn 0.4s ease-in;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
+.dropdown-content.show { display: block; }

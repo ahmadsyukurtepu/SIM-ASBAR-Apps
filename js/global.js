@@ -1,60 +1,93 @@
-// 1. Cek apakah user sudah login
-const userData = JSON.parse(localStorage.getItem('userSimAsbar'));
+document.addEventListener("DOMContentLoaded", () => {
+    const loginForm = document.getElementById("loginForm");
 
-if (!userData) {
+    if (loginForm) {
+        loginForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+
+            // Memanggil fungsi dari api.js
+            const result = await fetchAPI({
+                action: "login",
+                username: username,
+                password: password
+            });
+
+            if (result.status === "success") {
+                // Simpan data user ke storage
+                localStorage.setItem("userSimAsbar", JSON.stringify(result.user));
+                alert("Selamat Datang, " + result.user.nama);
+                window.location.href = "pages/dashboard.html";
+            } else {
+                document.getElementById("message").innerText = result.message;
+            }
+        });
+    }
+});
+
+// Fungsi Logout
+function logout() {
+    localStorage.removeItem("userSimAsbar");
     window.location.href = "../index.html";
 }
+function checkSidebarAccess() {
+    const user = JSON.parse(localStorage.getItem("userSimAsbar"));
+    if (!user) {
+        window.location.href = "../index.html";
+        return;
+    }
 
-// 2. Mapping Menu Berdasarkan Level
-// Level: Admin Utama (Lv1), Admin Lembaga (Lv2), Admin Alumni (Lv3)
-const menuConfig = [
-    { name: "Dashboard", icon: "layout-dashboard", path: "dashboard.html", access: ["Admin Utama", "Admin Lembaga", "Admin Alumni"] },
-    { name: "Dokumen", icon: "folder-closed", path: "dokumen.html", access: ["Admin Utama"] },
-    { name: "Persuratan", icon: "mail", path: "surat.html", access: ["Admin Utama", "Admin Lembaga", "Admin Alumni"] },
-    { name: "Keuangan", icon: "wallet", path: "keuangan.html", access: ["Admin Utama", "Admin Lembaga", "Admin Alumni"] },
-    { name: "Data Santri", icon: "users", path: "santri.html", access: ["Admin Utama", "Admin Lembaga"] },
-    { name: "Data Pegawai", icon: "contact-2", path: "pegawai.html", access: ["Admin Utama", "Admin Lembaga"] },
-    { name: "Data Alumni", icon: "graduation-cap", path: "alumni.html", access: ["Admin Utama", "Admin Lembaga", "Admin Alumni"] },
-    { name: "Galeri", icon: "image", path: "galeri.html", access: ["Admin Utama", "Admin Lembaga", "Admin Alumni"] },
-];
+    const level = user.level; // Lv1, Lv2, atau Lv3
 
-// 3. Render Menu ke Sidebar
-function renderMenu() {
-    const sidebar = document.getElementById('sidebarMenu');
-    let menuHTML = "";
+    // Contoh menyembunyikan menu Dokumen jika bukan Lv1
+    if (level !== "Lv1") {
+        const menuDokumen = document.getElementById("menu-dokumen");
+        if (menuDokumen) menuDokumen.style.display = "none";
+    }
 
-    menuConfig.forEach(item => {
-        if (item.access.includes(userData.level)) {
-            menuHTML += `
-                <a href="${item.path}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-slate-800 transition group">
-                    <i data-lucide="${item.icon}" class="w-5 h-5 text-slate-400 group-hover:text-blue-400"></i>
-                    <span class="text-sm font-medium">${item.name}</span>
-                </a>
-            `;
+    // Tambahkan logika lainnya untuk level lainnya
+}
+document.addEventListener("DOMContentLoaded", () => {
+    const user = JSON.parse(localStorage.getItem("userSimAsbar"));
+
+    // 1. Cek apakah user sudah login
+    if (!user) {
+        // Jika tidak di halaman index, tendang ke login
+        if (!window.location.pathname.endsWith("index.html")) {
+            window.location.href = "../index.html";
+        }
+        return;
+    }
+
+    // 2. Update Tampilan Profil & Header
+    const welcomeText = document.getElementById("welcome-text");
+    const nameDisplay = document.getElementById("user-display-name");
+    const levelBadge = document.getElementById("user-level-badge");
+    const infoLembaga = document.getElementById("info-lembaga");
+
+    if (nameDisplay) nameDisplay.innerText = user.nama;
+    if (levelBadge) levelBadge.innerText = "Akses: " + user.level;
+    if (welcomeText) welcomeText.innerText = "Halo, " + user.nama;
+    if (infoLembaga) infoLembaga.innerText = "Lembaga: " + user.lembaga;
+
+    // 3. Filter Menu Berdasarkan Level (Lv1, Lv2, Lv3)
+    const menuItems = document.querySelectorAll(".menu-item");
+    menuItems.forEach(item => {
+        const allowedLevels = item.getAttribute("data-level").split(",");
+        if (!allowedLevels.includes(user.level)) {
+            item.style.display = "none";
         }
     });
-    sidebar.innerHTML = menuHTML;
-    lucide.createIcons(); // Render ulang icon
+});
+
+// Fungsi Dropdown Profil
+function toggleDropdown() {
+    document.getElementById("profile-dropdown").classList.toggle("show");
 }
 
-// 4. Update UI Profile & Informasi
-function updateUI() {
-    document.getElementById('userName').innerText = userData.nama;
-    document.getElementById('welcomeName').innerText = userData.nama;
-    document.getElementById('userLevel').innerText = userData.level;
-    document.getElementById('welcomeLevel').innerText = userData.level;
-    document.getElementById('labelLembaga').innerText = userData.lembaga;
-    document.getElementById('userInitial').innerText = userData.nama.charAt(0).toUpperCase();
-    document.getElementById('currentDate').innerText = new Date().toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-}
-
+// Fungsi Logout
 function logout() {
-    localStorage.removeItem('userSimAsbar');
+    localStorage.removeItem("userSimAsbar");
     window.location.href = "../index.html";
 }
-
-// Jalankan saat halaman dimuat
-document.addEventListener('DOMContentLoaded', () => {
-    updateUI();
-    renderMenu();
-});

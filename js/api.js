@@ -1,7 +1,7 @@
-// GANTI dengan URL Web App yang Anda dapatkan setelah Deploy di Google Apps Script
-const API_URL = "https://script.google.com/macros/s/AKfycbyhDVs0q_Y0m_ezoBUWzDleWOfmz-xyV8Z_I12Ui4LxzkpTzUFxKt5NfSsAkx3ay8ZiAQ/exec";
+// Gantilah URL ini dengan URL Web App yang Anda salin tadi
+const API_URL = "https://script.google.com/macros/s/AKfycby0vYsgTAgCwgVngtqWdrhd2bKhsmSusMLcTL0fmXfhluXm30c1FD-hc3Iy2CFSpv52/exec";
 
-async function postData(data) {
+async function fetchAPI(data) {
     try {
         const response = await fetch(API_URL, {
             method: "POST",
