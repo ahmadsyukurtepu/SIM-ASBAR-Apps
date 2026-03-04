@@ -130,3 +130,14 @@ body {
 .nav-link[aria-expanded="false"] .fa-chevron-down {
     transition: 0.3s;
 }
+/* Pastikan sidebar bisa menampilkan menu ke bawah */
+.sidebar {
+    overflow-y: auto;
+}
+
+/* Mempertegas efek klik pada menu sidebar */
+.nav-link[data-bs-toggle="collapse"] {
+    cursor: pointer;
+    position: relative;
+    z-index: 10;
+}
