@@ -1,81 +1,49 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - SIM-ASBAR</title>
-    <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-</head>
-<body>
-    <div class="container">
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <h3>SIM-ASBAR</h3>
-            </div>
-            <nav class="sidebar-menu">
-                <ul>
-                    <li><a href="dashboard.html" class="active"><i class="fas fa-home"></i> Dashboard</a></li>
-                    
-                    <li class="menu-item" data-level="Lv1">
-                        <a href="dokumen.html"><i class="fas fa-file-alt"></i> Dokumen</a>
-                    </li>
-
-                    <li class="menu-item" data-level="Lv1,Lv2,Lv3">
-                        <a href="surat.html"><i class="fas fa-envelope"></i> Persuratan</a>
-                    </li>
-
-                    <li class="menu-item" data-level="Lv1,Lv2,Lv3">
-                        <a href="keuangan.html"><i class="fas fa-wallet"></i> Keuangan</a>
-                    </li>
-
-                    <li class="menu-item" data-level="Lv1,Lv2">
-                        <a href="santri.html"><i class="fas fa-user-graduate"></i> Data Santri</a>
-                    </li>
-
-                    <li class="menu-item" data-level="Lv1,Lv2">
-                        <a href="pegawai.html"><i class="fas fa-user-tie"></i> Data Pegawai</a>
-                    </li>
-
-                    <li class="menu-item" data-level="Lv1,Lv2,Lv3">
-                        <a href="alumni.html"><i class="fas fa-users-viewfinder"></i> Data Alumni</a>
-                    </li>
-
-                    <li class="menu-item" data-level="Lv1,Lv2,Lv3">
-                        <a href="galeri.html"><i class="fas fa-images"></i> Galeri</a>
-                    </li>
-                </ul>
-            </nav>
-        </aside>
-
-        <main class="main-content">
-            <header class="top-header">
-                <div class="page-title">
-                    <h2 id="welcome-text">Selamat Datang</h2>
-                </div>
-                <div class="user-profile">
-                    <div class="profile-info" onclick="toggleDropdown()">
-                        <span id="user-display-name">User Name</span>
-                        <img src="https://ui-avatars.com/api/?name=User&background=random" id="user-avatar" alt="Avatar">
-                    </div>
-                    <div id="profile-dropdown" class="dropdown-content">
-                        <p id="user-level-badge">Level: -</p>
-                        <hr>
-                        <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Keluar</a>
-                    </div>
-                </div>
-            </header>
-
-            <section class="dashboard-stats">
-                <div class="card">
-                    <h3>Status Akun</h3>
-                    <p id="info-lembaga">Lembaga: -</p>
-                </div>
-            </section>
-        </main>
+<div class="dashboard-wrapper">
+    <div class="dashboard-header">
+        <h2 id="welcome-text">Selamat Datang di SIM-ASBAR</h2>
+        <p>Akses Manajemen Yayasan As'adiyah Baru Orai Tempe</p>
     </div>
 
-    <script src="../js/api.js"></script>
-    <script src="../js/global.js"></script>
-</body>
-</html>
+    <section class="dashboard-stats">
+        <div class="stat-card">
+            <div class="stat-icon" style="background: var(--primary-green); color: white;">
+                <i class="fas fa-id-badge"></i>
+            </div>
+            <div class="stat-info">
+                <h3>Status Akun</h3>
+                <p id="info-level" style="font-weight: bold; color: var(--primary-green);">-</p>
+                <small id="info-lembaga">Lembaga: -</small>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon" style="background: var(--secondary-yellow); color: var(--primary-green);">
+                <i class="fas fa-users"></i>
+            </div>
+            <div class="stat-info">
+                <h3>Data Terdaftar</h3>
+                <p>Klik menu untuk melihat detail</p>
+            </div>
+        </div>
+    </section>
+
+    <div class="dashboard-banner">
+        <h4>Petunjuk Penggunaan:</h4>
+        <ul>
+            <li>Gunakan menu samping untuk mengakses fitur sesuai level Anda.</li>
+            <li>Pastikan koneksi internet stabil saat mengunggah dokumen.</li>
+            <li>Klik ikon profil di pojok kanan atas untuk keluar.</li>
+        </ul>
+    </div>
+</div>
+
+<script>
+    (function() {
+        const user = JSON.parse(localStorage.getItem("userSimAsbar"));
+        if (user) {
+            document.getElementById("welcome-text").innerText = "Selamat Datang, " + user.nama;
+            document.getElementById("info-level").innerText = "Level Akses: " + user.role;
+            document.getElementById("info-lembaga").innerText = "Unit: " + (user.lembaga || "Yayasan");
+        }
+    })();
+</script>
