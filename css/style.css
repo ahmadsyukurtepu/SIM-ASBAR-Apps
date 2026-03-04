@@ -1,44 +1,106 @@
 :root {
     --hijau-asadiyah: #1a5e20;
+    --hijau-tua: #0d3211;
     --kuning-asadiyah: #ffc107;
     --bg-light: #f4f7f6;
+    --text-dark: #333;
 }
 
-body { background-color: var(--bg-light); font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+body { 
+    background-color: var(--bg-light); 
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    color: var(--text-dark);
+    overflow-x: hidden;
+}
 
-/* Sidebar Style */
+/* --- SIDEBAR RESPONSIVE --- */
 .sidebar { 
     min-height: 100vh; 
-    background: var(--hijau-asadiyah); 
+    background: linear-gradient(180deg, var(--hijau-asadiyah) 0%, var(--hijau-tua) 100%); 
     color: white; 
     padding: 20px;
+    box-shadow: 4px 0 10px rgba(0,0,0,0.1);
+}
+
+/* Agar Sidebar tidak hilang di Mobile tapi rapi */
+@media (max-width: 768px) {
+    .sidebar {
+        min-height: auto;
+        padding: 15px;
+    }
 }
 
 .nav-link { 
-    color: rgba(255,255,255,0.8); 
-    margin-bottom: 8px; 
-    border-radius: 8px;
+    color: rgba(255,255,255,0.7) !important; 
+    margin-bottom: 5px; 
+    border-radius: 10px;
+    padding: 12px 15px;
+    transition: all 0.2s;
+    font-weight: 500;
 }
 
 .nav-link:hover, .nav-link.active { 
-    color: white; 
+    color: white !important; 
     background: rgba(255,255,255,0.15); 
+    transform: translateX(5px);
 }
 
-/* Card Menu */
+/* --- CARD MENU (GRID) --- */
 .card-menu { 
-    border: none; 
-    border-radius: 15px; 
-    transition: all 0.3s; 
+    border: 1px solid rgba(0,0,0,0.05); 
+    border-radius: 18px; 
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
     cursor: pointer; 
     text-align: center;
-    padding: 25px;
     background: white;
+    height: 100%;
 }
 
 .card-menu:hover { 
-    transform: translateY(-5px); 
-    box-shadow: 0 10px 20px rgba(0,0,0,0.1); 
+    transform: translateY(-8px); 
+    box-shadow: 0 15px 30px rgba(26, 94, 32, 0.15); 
+    border-color: var(--hijau-asadiyah);
 }
 
-.card-menu i { color: var(--hijau-asadiyah); margin-bottom: 15px; }
+.card-menu i { 
+    color: var(--hijau-asadiyah); 
+    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+}
+
+.card-menu h6 {
+    color: var(--text-dark);
+    font-size: 0.9rem;
+    margin-top: 10px;
+}
+
+/* --- HEADER & UTILITY --- */
+.header-profile {
+    background: white;
+    border-radius: 15px;
+    border-left: 5px solid var(--kuning-asadiyah);
+}
+
+/* Badge Custom */
+.badge-level {
+    background-color: var(--kuning-asadiyah);
+    color: #000;
+    font-weight: 600;
+    padding: 5px 12px;
+    border-radius: 20px;
+}
+
+/* Animasi sederhana saat halaman dimuat */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+#dashboardGrid > div {
+    animation: fadeIn 0.5s ease backwards;
+}
+
+/* Loop animasi delay untuk tiap card */
+#dashboardGrid > div:nth-child(1) { animation-delay: 0.1s; }
+#dashboardGrid > div:nth-child(2) { animation-delay: 0.2s; }
+#dashboardGrid > div:nth-child(3) { animation-delay: 0.3s; }
+#dashboardGrid > div:nth-child(4) { animation-delay: 0.4s; }
