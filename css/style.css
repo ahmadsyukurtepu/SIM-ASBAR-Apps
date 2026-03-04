@@ -2,87 +2,74 @@
     --hijau-asadiyah: #1a5e20;
     --hijau-tua: #0d3211;
     --kuning-asadiyah: #ffc107;
-    --bg-light: #f4f7f6;
-    --text-dark: #333;
     --sidebar-width: 260px;
+    --sidebar-collapsed: 70px;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body { 
-    background-color: var(--bg-light); 
-    font-family: 'Segoe UI', sans-serif;
-    color: var(--text-dark);
-    display: flex; /* Membuat sidebar dan main sejajar */
+    background-color: #f4f7f6; 
+    font-family: 'Segoe UI', Roboto, sans-serif;
+    display: flex;
     min-height: 100vh;
 }
 
-/* --- SIDEBAR --- */
+/* SIDEBAR: Terkunci di kiri, tidak boleh melompat */
 .sidebar { 
     width: var(--sidebar-width);
+    background: linear-gradient(180deg, var(--hijau-asadiyah), var(--hijau-tua));
+    color: white;
+    position: fixed;
     height: 100vh;
-    position: fixed; /* Tetap di posisi meski di-scroll */
-    top: 0; left: 0;
-    background: linear-gradient(180deg, var(--hijau-asadiyah) 0%, var(--hijau-tua) 100%); 
-    color: white; 
-    padding: 20px 15px;
-    transition: all 0.3s ease;
     z-index: 1000;
-    overflow-y: auto;
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* --- KONTEN UTAMA --- */
+/* MAIN: Langsung beri margin kiri agar tidak tertutup sidebar */
 main {
     flex: 1;
-    margin-left: var(--sidebar-width); /* Memberi ruang agar tidak tertutup sidebar */
+    margin-left: var(--sidebar-width);
     padding: 25px;
-    transition: all 0.3s ease;
+    min-width: 0; /* Mencegah konten meluber */
+    transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* --- MENU NAVIGASI --- */
-.nav-link { 
-    color: rgba(255,255,255,0.7) !important; 
-    margin-bottom: 5px; 
-    border-radius: 10px;
-    padding: 12px 15px;
-    transition: 0.2s;
+/* MENU NAVIGASI */
+.nav-link {
+    color: rgba(255,255,255,0.7) !important;
+    padding: 12px 20px;
     display: flex;
     align-items: center;
     text-decoration: none;
+    transition: 0.2s;
+    border-radius: 8px;
+    margin: 4px 10px;
 }
 
-.nav-link:hover, .nav-link.active { 
-    color: white !important; 
-    background: rgba(255,255,255,0.15); 
+.nav-link:hover, .nav-link.active {
+    background: rgba(255,255,255,0.1);
+    color: white !important;
 }
 
-.nav-link i { width: 25px; font-size: 1.1rem; }
+.nav-link i { width: 30px; font-size: 1.2rem; }
 
-/* --- RESPONSIVE MOBILE (SPLIT MODE) --- */
+/* RESPONSIVE: Mode Ikon untuk HP */
 @media (max-width: 768px) {
-    :root { --sidebar-width: 75px; } /* Sidebar mengecil */
-
-    .sidebar span, 
-    .sidebar h6, 
-    .sidebar .fa-chevron-down, 
-    .sidebar small { 
-        display: none !important; /* Sembunyikan semua teks */
+    .sidebar { width: var(--sidebar-collapsed); }
+    main { margin-left: var(--sidebar-collapsed); }
+    .sidebar span, .sidebar h6, .sidebar small, .sidebar .fa-chevron-down { 
+        display: none !important; 
     }
-
-    .sidebar { padding: 20px 5px; text-align: center; }
-    .nav-link { justify-content: center; padding: 15px 0; }
-    .nav-link i { margin: 0 !important; font-size: 1.4rem; }
-    
-    main { padding: 15px; }
+    .nav-link { justify-content: center; margin: 5px; padding: 15px 0; }
 }
 
-/* --- KOMPONEN TABEL & CARD --- */
-.card-custom {
-    background: white;
-    border-radius: 15px;
-    border: none;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+/* ANIMASI HALUS UNTUK KONTEN */
+.fade-in {
+    animation: fadeIn 0.4s ease-in;
 }
 
-.badge-masuk { background: #e3f2fd; color: #0d47a1; }
-.badge-keluar { background: #f1f8e9; color: #1b5e20; }
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
