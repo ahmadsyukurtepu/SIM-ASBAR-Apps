@@ -1,74 +1,108 @@
 /**
- * Logika Modul Persuratan SIM-ASBAR
+ * Logika Khusus Modul Persuratan SIM-ASBAR
  */
 
-// 1. Ambil Parameter Lembaga dari URL (tpa, mda, atau alumni)
-const urlParams = new URLSearchParams(window.location.search);
-const lembagaTujuan = urlParams.get('lembaga'); // Hasilnya: 'tpa', 'mda', atau 'alumni'
-
 async function initHalamanSurat() {
-    // Tampilkan loading spinner di tabel
-    const tbody = document.getElementById("tableBodySurat");
-    tbody.innerHTML = `<tr><td colspan="5" class="text-center py-5">
-        <div class="spinner-border text-success" role="status"></div>
-        <p class="mt-2 text-muted">Memuat Arsip ${lembagaTujuan.toUpperCase()}...</p>
-    </td></tr>`;
+    // 1. Ambil data user dan parameter URL
+    const raw = localStorage.getItem("user_simasbar");
+    if (!raw) { window.location.href = "../index.html"; return; }
+    const user = JSON.parse(raw);
 
-    // 2. Ambil data dari API (api.js)
-    // Parameter: Modul "SURAT", Lembaga dari URL
-    const res = await fetchModulData("SURAT", lembagaTujuan);
+    const urlParams = new URLSearchParams(window.location.search);
+    const lembagaReq = urlParams.get('lembaga'); 
+    
+    // 2. Tentukan target lembaga (prioritas dari URL, lalu dari data user)
+    const targetLembaga = lembagaReq ? lembagaReq.toUpperCase() : user.lembaga.toUpperCase();
+    
+    // 3. Update Label UI
+    const subJudul = document.getElementById("subJudul");
+    const namaLembaga = document.getElementById("namaLembaga");
+    const userLevelDisplay = document.getElementById("userLevelDisplay");
 
-    if (res && res.status === "success") {
-        tampilkanTabel(res.data);
-    } else {
-        tbody.innerHTML = `<tr><td colspan="5" class="text-center text-danger py-5">
-            <i class="fa fa-exclamation-triangle fa-2x mb-3"></i><br>
-            Gagal mengambil data: ${res.message}
-        </td></tr>`;
-    }
+    if(subJudul) subJudul.innerText = "Unit Kerja: " + targetLembaga;
+    if(namaLembaga) namaLembaga.innerText = targetLembaga;
+    if(userLevelDisplay) userLevelDisplay.innerText = user.level;
+
+    // 4. Ambil Data dari API
+    loadDataSurat(targetLembaga);
 }
 
-function tampilkanTabel(data) {
-    const tbody = document.getElementById("tableBodySurat");
+async function loadDataSurat(targetLembaga) {
+    const tbody = document.getElementById("isiTabelSurat");
+    const loader = document.getElementById("loader");
+    if(!tbody) return;
+
+    // Reset tabel dan tampilkan loader
     tbody.innerHTML = "";
+    if(loader) loader.style.display = "block";
 
-    // Data index [0] biasanya header GSheet, jadi kita mulai dari index 1
-    if (data.length <= 1) {
-        tbody.innerHTML = `<tr><td colspan="5" class="text-center py-5 text-muted">Belum ada arsip surat.</td></tr>`;
-        return;
-    }
+    try {
+        const result = await fetchModulData("SURAT", targetLembaga);
+        if(loader) loader.style.display = "none";
 
-    for (let i = 1; i < data.length; i++) {
-        const row = data[i];
-        // Struktur kolom: 0:Kategori, 1:Tanggal, 2:NoSurat, 3:Perihal, 4:Asal/Tujuan, 5:Link
-        
-        // Warna Badge Kategori
-        const badgeClass = row[0].toLowerCase() === 'masuk' ? 'bg-info' : 'bg-warning text-dark';
+        if (result && result.status === "success") {
+            const data = result.data;
+            
+            // Cek jika data hanya berisi header atau kosong
+            if (!data || data.length <= 1) {
+                tbody.innerHTML = `<tr><td colspan="7" class="text-center py-5 text-muted fst-italic">Belum ada arsip surat untuk unit ini.</td></tr>`;
+                return;
+            }
 
-        tbody.innerHTML += `
-            <tr class="align-middle">
-                <td class="ps-3">
-                    <span class="badge ${badgeClass} mb-1" style="font-size: 0.7rem;">${row[0]}</span>
-                    <div class="fw-bold small">${row[2]}</div>
-                </td>
-                <td class="small">${formatTanggalIndo(row[1])}</td>
-                <td class="small fw-medium text-wrap" style="max-width: 250px;">${row[3]}</td>
-                <td class="small text-muted">${row[4]}</td>
-                <td class="text-center pe-3">
-                    <a href="${row[5]}" target="_blank" class="btn btn-sm btn-outline-danger shadow-sm">
-                        <i class="fa fa-file-pdf"></i> Lihat
-                    </a>
-                </td>
-            </tr>
-        `;
+            let html = "";
+            // Mulai dari index 1 (melewati header GSheet)
+            for (let i = 1; i < data.length; i++) {
+                const row = data[i];
+                const kat = row[0] ? row[0].toUpperCase() : "N/A";
+                const badgeClass = kat === "MASUK" ? "badge-masuk" : "badge-keluar";
+                const pdfLink = row[5];
+                
+                html += `
+                    <tr>
+                        <td class="px-3">
+                            <span class="badge ${badgeClass} p-2 w-100" style="font-size:10px">${kat}</span>
+                        </td>
+                        <td class="small text-muted">${formatTglIndo(row[1])}</td>
+                        <td class="fw-bold small text-truncate" style="max-width:150px">${row[2] || '-'}</td>
+                        <td class="small fw-medium">${row[3] || '-'}</td>
+                        <td class="hide-mobile small text-muted">${row[4] || '-'}</td>
+                        <td class="text-center">
+                            ${pdfLink ? 
+                                `<a href="${pdfLink}" target="_blank" class="btn-pdf"><i class="fa fa-file-pdf fa-lg"></i></a>` : 
+                                '<span class="text-muted small">-</span>'}
+                        </td>
+                        <td class="text-center">
+                            <button class="btn btn-sm btn-light border shadow-sm" onclick="editSurat(${i})">
+                                <i class="fa fa-edit text-success"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }
+            tbody.innerHTML = html;
+        } else {
+            tbody.innerHTML = `<tr><td colspan="7" class="text-center py-5 text-danger small">Gagal memuat: ${result.message}</td></tr>`;
+        }
+    } catch (err) {
+        if(loader) loader.style.display = "none";
+        tbody.innerHTML = `<tr><td colspan="7" class="text-center py-5 text-danger">Terjadi kesalahan sistem.</td></tr>`;
     }
 }
 
-function formatTanggalIndo(tglStr) {
-    if (!tglStr) return "-";
-    const d = new Date(tglStr);
-    return d.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
+function formatTglIndo(str) {
+    if(!str) return "-";
+    const d = new Date(str);
+    if(isNaN(d.getTime())) return str; // Jika bukan format tanggal, kembalikan teks asli
+    return d.toLocaleDateString('id-ID', { day:'2-digit', month:'short', year:'numeric' });
 }
 
-// Jalankan saat halaman selesai dimuat
+function tambahSurat() {
+    alert("Fitur Form Input sedang disiapkan, Pak Guru!");
+}
+
+function editSurat(index) {
+    alert("Fitur Edit Baris ke-" + index + " sedang disiapkan!");
+}
+
+// Jalankan saat halaman dimuat
 window.addEventListener('load', initHalamanSurat);

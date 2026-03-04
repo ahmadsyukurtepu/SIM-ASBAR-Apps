@@ -10,123 +10,78 @@
 </head>
 <body>
 
-<button class="btn btn-success d-md-none position-fixed bottom-0 end-0 m-3 shadow-lg rounded-circle" 
-        type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMobile" style="width: 60px; height: 60px; z-index: 1050;">
-    <i class="fa fa-bars fa-lg"></i>
-</button>
+    <nav class="sidebar shadow">
+        <div class="text-center mb-4 pt-3">
+            <img src="../assets/logo.png" class="mb-2 rounded-circle bg-white p-1" width="50" onerror="this.src='https://via.placeholder.com/50'">
+            <h6 class="fw-bold text-white mb-0">SIM-ASBAR</h6>
+            <span id="userLevel" class="badge bg-warning text-dark small mt-2"></span>
+        </div>
+        
+        <ul class="nav flex-column" id="mainMenu">
+            </ul>
 
-<div class="container-fluid">
-    <div class="row">
-        <nav class="col-md-3 col-lg-2 d-none d-md-block sidebar shadow position-fixed">
-            <div class="text-center mb-4 pt-3">
-                <img src="https://via.placeholder.com/60" class="mb-2 rounded-circle bg-white p-1">
-                <h6 class="fw-bold text-white">SIM-ASBAR-Apps</h6>
-                <span id="userLevel" class="badge bg-warning text-dark small"></span>
-            </div>
-            <ul class="nav flex-column" id="mainMenu"></ul>
-            <hr class="text-white-50">
-            <button onclick="logout()" class="btn btn-outline-light btn-sm w-100"><i class="fa fa-power-off me-2"></i>Keluar</button>
-        </nav>
+        <hr class="text-white-50 mt-4">
+        <button onclick="logout()" class="btn btn-link text-white text-decoration-none w-100 text-start ps-3">
+            <i class="fa fa-power-off me-2"></i> <span>Keluar</span>
+        </button>
+    </nav>
 
-        <div class="offcanvas offcanvas-start bg-success text-white" tabindex="-1" id="sidebarMobile" style="width: 280px;">
-            <div class="offcanvas-header border-bottom border-white-50">
-                <h5 class="offcanvas-title fw-bold">SIM-ASBAR</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+    <main>
+        <div class="d-flex justify-content-between align-items-center mb-4 bg-white p-3 rounded shadow-sm border-start border-success border-4">
+            <div>
+                <h5 class="mb-0 fw-bold">Halo, <span id="userName">User</span>!</h5>
+                <small id="userLembaga" class="text-muted"></small>
             </div>
-            <div class="offcanvas-body">
-                <div id="infoUserMobile" class="mb-4 text-center">
-                     <h6 id="userNameMobile" class="fw-bold mb-0"></h6>
-                     <small id="userLembagaMobile" class="text-white-50"></small>
-                </div>
-                <ul class="nav flex-column" id="mainMenuMobile"></ul>
+            <div class="text-end d-none d-sm-block">
+                <select class="form-select form-select-sm" id="filterTahun">
+                    <option value="2025/2026">T.A. 2025/2026</option>
+                    <option value="2024/2025">T.A. 2024/2025</option>
+                </select>
             </div>
         </div>
 
-        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4 offset-md-3 offset-lg-2">
-            
-            <div class="d-flex justify-content-between align-items-center mb-4 bg-white p-3 rounded shadow-sm border-start border-success border-4">
-                <div>
-                    <h5 class="mb-0 fw-bold">Halo, <span id="userName">User</span>!</h5>
-                    <small id="userLembaga" class="text-muted"></small>
-                </div>
-                <div class="text-end d-none d-sm-block">
-                    <select class="form-select form-select-sm" id="filterTahun">
-                        <option value="2025/2026">T.A. 2025/2026</option>
-                        <option value="2024/2025">T.A. 2024/2025</option>
-                    </select>
-                </div>
-            </div>
-
-            <h6 class="fw-bold mb-3"><i class="fa fa-chart-pie me-2 text-success"></i>Ringkasan Data</h6>
-            
-            <div class="row g-3 mb-4" id="statGrid">
-                <div class="col-6 col-md-4 col-lg-2">
-                    <div class="card border-0 shadow-sm text-center p-3 h-100">
-                        <small class="text-muted d-block mb-1">Surat</small>
-                        <h4 class="fw-bold mb-0 text-primary" id="countSurat">0</h4>
-                    </div>
-                </div>
-                <div class="col-6 col-md-4 col-lg-2">
-                    <div class="card border-0 shadow-sm text-center p-3 h-100">
-                        <small class="text-muted d-block mb-1">Kas (Jt)</small>
-                        <h4 class="fw-bold mb-0 text-success" id="countDana">0</h4>
-                    </div>
-                </div>
-                <div class="col-6 col-md-4 col-lg-2">
-                    <div class="card border-0 shadow-sm text-center p-3 h-100">
-                        <small class="text-muted d-block mb-1">Pegawai</small>
-                        <h4 class="fw-bold mb-0 text-dark" id="countPegawai">0</h4>
-                    </div>
-                </div>
-                <div class="col-6 col-md-4 col-lg-2">
-                    <div class="card border-0 shadow-sm text-center p-3 h-100">
-                        <small class="text-muted d-block mb-1">Santri</small>
-                        <h4 class="fw-bold mb-0 text-info" id="countSantri">0</h4>
-                    </div>
-                </div>
-                <div class="col-6 col-md-4 col-lg-2">
-                    <div class="card border-0 shadow-sm text-center p-3 h-100">
-                        <small class="text-muted d-block mb-1">Alumni</small>
-                        <h4 class="fw-bold mb-0 text-warning" id="countAlumni">0</h4>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card border-0 shadow-sm p-4 text-center text-muted" style="min-height: 300px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
-                <i class="fa fa-chart-bar fa-3x mb-3 opacity-25"></i>
-                <h6 class="fw-bold">Statistik Bulanan</h6>
-                <p class="small">Data grafik akan muncul secara otomatis berdasarkan input harian.</p>
-            </div>
-        </main>
-    </div>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-<script src="../js/api.js"></script>
-
-<script src="../js/global.js"></script>
-
-<script>
-    async function muatStatistik() {
-        console.log("Sedang mengambil data statistik...");
+        <h6 class="fw-bold mb-3"><i class="fa fa-chart-pie me-2 text-success"></i>Ringkasan Data</h6>
         
-        // Panggil fetchModulData dari api.js
-        const res = await fetchModulData("STATISTIK"); 
-        
-        if(res && res.status === "success") {
-            const data = res.data; // Sesuaikan dengan struktur JSON dari Apps Script
-            document.getElementById("countSurat").innerText = data.totalSurat || "0";
-            document.getElementById("countDana").innerText = data.totalKas || "0";
-            document.getElementById("countSantri").innerText = data.totalSantri || "0";
-            document.getElementById("countAlumni").innerText = data.totalAlumni || "0";
-            document.getElementById("countPegawai").innerText = data.totalPegawai || "0";
+        <div class="row g-3 mb-4" id="statGrid">
+            <div class="col-6 col-md-4 col-lg-2">
+                <div class="card border-0 shadow-sm text-center p-3 h-100">
+                    <small class="text-muted d-block mb-1">Surat</small>
+                    <h4 class="fw-bold mb-0 text-primary" id="countSurat">0</h4>
+                </div>
+            </div>
+            <div class="col-6 col-md-4 col-lg-2">
+                <div class="card border-0 shadow-sm text-center p-3 h-100">
+                    <small class="text-muted d-block mb-1">Kas (Jt)</small>
+                    <h4 class="fw-bold mb-0 text-success" id="countDana">0</h4>
+                </div>
+            </div>
+            </div>
+
+        <div class="card border-0 shadow-sm p-4 text-center text-muted" style="min-height: 300px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+            <i class="fa fa-chart-bar fa-3x mb-3 opacity-25"></i>
+            <h6 class="fw-bold">Statistik Bulanan</h6>
+            <p class="small">Data grafik akan muncul secara otomatis berdasarkan input harian.</p>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/global.js"></script>
+
+    <script>
+        async function muatStatistik() {
+            // Logika muatStatistik Bapak sudah benar
+            const res = await fetchModulData("STATISTIK"); 
+            if(res && res.status === "success") {
+                const data = res.data;
+                document.getElementById("countSurat").innerText = data.totalSurat || "0";
+                document.getElementById("countDana").innerText = data.totalKas || "0";
+                document.getElementById("countSantri").innerText = data.totalSantri || "0";
+                document.getElementById("countAlumni").innerText = data.totalAlumni || "0";
+                document.getElementById("countPegawai").innerText = data.totalPegawai || "0";
+            }
         }
-    }
-
-    // Jalankan fungsi saat halaman siap
-    window.addEventListener('load', () => {
-        muatStatistik();
-    });
-</script>
+        window.addEventListener('load', muatStatistik);
+    </script>
 </body>
 </html>

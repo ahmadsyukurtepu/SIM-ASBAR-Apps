@@ -8,13 +8,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="../css/style.css">
     <style>
-        /* Custom Table & Badge Styles */
+        /* Custom Table & Badge Styles (Tetap di sini karena spesifik halaman ini) */
         .badge-masuk { background-color: #e3f2fd; color: #0d47a1; border: 1px solid #bbdefb; }
         .badge-keluar { background-color: #f1f8e9; color: #1b5e20; border: 1px solid #dcedc8; }
         .btn-pdf { color: #dc3545; transition: 0.3s; }
         .btn-pdf:hover { color: #a71d2a; transform: scale(1.2); }
         
-        /* Menyesuaikan table agar lebih ringkas di layar kecil */
         @media (max-width: 768px) {
             .table-responsive { font-size: 0.85rem; }
             .hide-mobile { display: none; }
@@ -43,9 +42,9 @@
         <div class="d-flex justify-content-between align-items-center mb-4 bg-white p-3 rounded shadow-sm border-start border-success border-4">
             <div>
                 <h4 class="mb-0 fw-bold">Manajemen Persuratan</h4>
-                <small class="text-muted" id="subJudul">Sinkronisasi data...</small>
+                <small class="text-muted" id="subJudul">Menghubungkan ke server...</small>
             </div>
-            <button class="btn btn-success" onclick="tambahSurat()">
+            <button class="btn btn-success shadow-sm" onclick="tambahSurat()">
                 <i class="fa fa-plus-circle me-1"></i> <span class="hide-mobile">Input Surat</span>
             </button>
         </div>
@@ -53,7 +52,7 @@
         <div class="alert alert-light border-0 shadow-sm mb-3 d-flex justify-content-between align-items-center">
             <div class="small">
                 <i class="fa fa-info-circle text-success me-1"></i> 
-                Menampilkan arsip digital untuk unit: <strong id="namaLembaga"></strong>
+                Menampilkan arsip digital: <strong id="namaLembaga">...</strong>
             </div>
         </div>
 
@@ -89,80 +88,6 @@
     <script src="../js/api.js"></script>
     <script src="../js/global.js"></script>
     
-    <script>
-        const urlParams = new URLSearchParams(window.location.search);
-        const lembagaReq = urlParams.get('lembaga'); 
-
-        async function initSuratPage() {
-            const raw = localStorage.getItem("user_simasbar");
-            if (!raw) { window.location.href = "../index.html"; return; }
-            const user = JSON.parse(raw);
-            
-            // Set UI Labels
-            const labelLembaga = lembagaReq ? lembagaReq.toUpperCase() : user.lembaga.toUpperCase();
-            document.getElementById("subJudul").innerText = "Unit Kerja: " + labelLembaga;
-            document.getElementById("namaLembaga").innerText = labelLembaga;
-            document.getElementById("userLevelDisplay").innerText = user.level;
-
-            // Load Data
-            loadDataSurat(labelLembaga);
-        }
-
-        async function loadDataSurat(targetLembaga) {
-            const tbody = document.getElementById("isiTabelSurat");
-            const loader = document.getElementById("loader");
-
-            // Menggunakan fetchModulData dari api.js yang sudah diperbaiki
-            const result = await fetchModulData("SURAT", targetLembaga);
-            loader.style.display = "none";
-
-            if (result && result.status === "success") {
-                const data = result.data;
-                if (data.length <= 1) {
-                    tbody.innerHTML = `<tr><td colspan="7" class="text-center py-5 text-muted">Belum ada data surat di database.</td></tr>`;
-                    return;
-                }
-
-                let html = "";
-                for (let i = 1; i < data.length; i++) {
-                    const row = data[i];
-                    const kat = row[0] ? row[0].toUpperCase() : "N/A";
-                    const badgeClass = kat === "MASUK" ? "badge-masuk" : "badge-keluar";
-                    const pdfLink = row[5];
-                    
-                    html += `
-                        <tr>
-                            <td class="px-3"><span class="badge ${badgeClass} p-2 w-100" style="font-size:10px">${kat}</span></td>
-                            <td class="small text-muted">${formatTgl(row[1])}</td>
-                            <td class="fw-bold small text-truncate" style="max-width:150px">${row[2] || '-'}</td>
-                            <td class="small fw-medium">${row[3] || '-'}</td>
-                            <td class="hide-mobile small text-muted">${row[4] || '-'}</td>
-                            <td class="text-center">
-                                ${pdfLink ? `<a href="${pdfLink}" target="_blank" class="btn-pdf"><i class="fa fa-file-pdf fa-lg"></i></a>` : '-'}
-                            </td>
-                            <td class="text-center">
-                                <button class="btn btn-sm btn-light border" title="Edit Data"><i class="fa fa-edit text-success"></i></button>
-                            </td>
-                        </tr>
-                    `;
-                }
-                tbody.innerHTML = html;
-            } else {
-                tbody.innerHTML = `<tr><td colspan="7" class="text-center py-5 text-danger small fst-italic">Error: ${result.message}</td></tr>`;
-            }
-        }
-
-        function formatTgl(str) {
-            if(!str) return "-";
-            const d = new Date(str);
-            return d.toLocaleDateString('id-ID', { day:'2-digit', month:'short', year:'numeric' });
-        }
-
-        function tambahSurat() {
-            alert("Fitur Input Surat sedang disiapkan!");
-        }
-
-        window.onload = initSuratPage;
-    </script>
+    <script src="../js/surat.js"></script>
 </body>
 </html>
