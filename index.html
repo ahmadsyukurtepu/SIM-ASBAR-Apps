@@ -3,21 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - SIM-ASBAR</title>
+    <title>SIM-ASBAR-Apps</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <div class="login-container">
-        <h2>SIM-ASBAR Apps</h2>
-        <p>Sistem Informasi & Manajemen Yayasan</p>
-        <form id="loginForm">
-            <input type="text" id="username" placeholder="Username" required>
-            <input type="password" id="password" placeholder="Password" required>
-            <button type="submit">Masuk</button>
-        </form>
-        <div id="message"></div>
-    </div>
+    <div id="app">
+        <nav id="sidebar" class="active">
+            <div class="sidebar-header">
+                <h3>SIM-ASBAR</h3>
+            </div>
+            <ul class="list-unstyled components">
+                <li id="menu-dashboard">Dashboard</li>
+                <li id="menu-dokumen" class="role-lv1">Dokumen</li>
+                <li id="menu-surat">Persuratan</li>
+                </ul>
+        </nav>
 
+        <div id="content">
+            <header class="navbar">
+                <button type="button" id="sidebarCollapse">☰</button>
+                <div class="user-profile">
+                    <span id="user-name">Nama User</span>
+                    <div id="profile-icon">👤</div>
+                </div>
+            </header>
+            
+            <main id="main-body">
+                </main>
+        </div>
+    </div>
     <script src="js/global.js"></script>
 </body>
 </html>
