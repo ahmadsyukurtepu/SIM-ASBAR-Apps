@@ -164,3 +164,8 @@ body {
     #statGrid h3 { font-size: 1.2rem; }
     #statGrid small { font-size: 0.7rem; }
 }
+@media (max-width: 768px) {
+    .sidebar { width: 70px; padding: 10px 5px; text-align: center; }
+    .sidebar .nav-link span, .sidebar .fa-chevron-down { display: none; } /* Sembunyikan teks */
+    main { margin-left: 70px; } /* Geser konten agar tidak tertutup sidebar */
+}

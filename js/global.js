@@ -47,6 +47,12 @@ function initDashboard() {
     const rawData = localStorage.getItem("user_simasbar");
     if (!rawData) { window.location.href = "../index.html"; return; }
     const userData = JSON.parse(rawData);
+    // Di dalam fungsi initDashboard()
+const userNameEl = document.getElementById("userName");
+if (userNameEl) userNameEl.innerText = userData.nama;
+
+const userLevelEl = document.getElementById("userLevel");
+if (userLevelEl) userLevelEl.innerText = userData.level;
 
     // Update Profil Desktop
     document.getElementById("userName").innerText = userData.nama;
