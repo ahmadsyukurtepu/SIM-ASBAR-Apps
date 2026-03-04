@@ -65,7 +65,7 @@
                 // Simpan data user di Browser (Session)
                 localStorage.setItem("user_simasbar", JSON.stringify(res.user));
                 // Pindah ke halaman Dashboard
-                window.location.href = "dashboard.html";
+                window.location.href = "pages/dashboard.html";
             } else {
                 msg.innerText = res.message;
                 msg.style.display = "block";
