@@ -74,20 +74,24 @@ function renderMenu(userLevel) {
                 </div>`;
 
             // 2. RENDER SIDEBAR (Dengan Dropdown jika Admin Utama & punya Sub)
+            // RENDER SIDEBAR (Admin Utama dengan Sub Menu)
             if (userLevel.toLowerCase() === "admin utama" && menu.hasSub) {
                 side.innerHTML += `
                     <li class="nav-item">
-                        <a class="nav-link text-white d-flex justify-content-between align-items-center" 
-                           data-bs-toggle="collapse" href="#sub${menu.id}" role="button">
+                        <a class="nav-link text-white d-flex justify-content-between align-items-center collapsed" 
+                           data-bs-toggle="collapse" 
+                           href="#sub${menu.id}" 
+                           role="button" 
+                           aria-expanded="false">
                             <span><i class="fa ${menu.icon} me-2 text-white-50"></i> ${menu.title}</span>
                             <i class="fa fa-chevron-down small"></i>
                         </a>
-                        <div class="collapse ms-3" id="sub${menu.id}">
-                            <ul class="nav flex-column mb-2">
+                        <div class="collapse" id="sub${menu.id}">
+                            <ul class="nav flex-column" style="margin-left: 35px; border-left: 1px solid rgba(255,255,255,0.2);">
                                 ${menu.subs.map(s => `
                                     <li class="nav-item">
-                                        <a class="nav-link small py-1" href="${s.path}">
-                                            <i class="fa fa-circle-notch me-2" style="font-size:10px"></i> ${s.title}
+                                        <a class="nav-link small py-1" href="${s.path}" style="font-size: 0.8rem; color: rgba(255,255,255,0.8) !important;">
+                                            <i class="fa fa-circle me-2" style="font-size: 6px; vertical-align: middle;"></i> ${s.title}
                                         </a>
                                     </li>
                                 `).join('')}
