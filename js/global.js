@@ -76,17 +76,49 @@ function startApp(userData) {
 }
 
 // --- FILTER HAK AKSES ---
-function filterMenuByRole(role) {
+function filterMenuByRole(userRole, userLembaga) {
     const allProtectedElements = document.querySelectorAll('[data-level]');
     
     allProtectedElements.forEach(el => {
         const allowedLevels = el.getAttribute('data-level').split(',');
-        if (allowedLevels.includes(role)) {
+        const targetLembaga = el.getAttribute('data-lembaga'); // Bisa null
+
+        // Logika 1: Cek apakah Level/Role cocok
+        const roleCocok = allowedLevels.includes(userRole);
+
+        // Logika 2: Cek apakah Lembaga cocok (jika atribut data-lembaga ada)
+        let lembagaCocok = true; 
+        if (targetLembaga) {
+            const allowedLembaga = targetLembaga.split(',');
+            // ADMIN YAYASAN bisa melihat semua lembaga
+            if (userRole === "ADMIN" && userLembaga === "YAYASAN") {
+                lembagaCocok = true;
+            } else {
+                lembagaCocok = allowedLembaga.includes(userLembaga);
+            }
+        }
+
+        // Eksekusi Tampilan
+        if (roleCocok && lembagaCocok) {
             el.classList.remove('hidden');
         } else {
             el.classList.add('hidden');
         }
     });
+}
+
+// Jangan lupa update fungsi startApp agar mengirim dua parameter
+function startApp(userData) {
+    document.getElementById('loginOverlay').classList.add('hidden');
+    document.getElementById('mainApp').classList.remove('hidden');
+    
+    document.getElementById('adminName').innerText = userData.nama;
+    document.getElementById('adminLevelDisplay').innerText = userData.role;
+
+    // Filter Menu berdasarkan Role dan Lembaga
+    filterMenuByRole(userData.role, userData.lembaga);
+
+    loadPage('dashboard', 'Dashboard');
 }
 
 // --- NAVIGASI SPA ---
