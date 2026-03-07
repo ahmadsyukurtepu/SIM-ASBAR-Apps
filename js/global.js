@@ -77,20 +77,26 @@ function startApp(userData) {
 
 // --- FILTER HAK AKSES ---
 function filterMenuByRole(userRole, userLembaga) {
-    const allProtectedElements = document.querySelectorAll('[data-level]');
+    // Kita cari semua elemen yang punya aturan akses
+    const allProtectedElements = document.querySelectorAll('[data-level], [data-lembaga]');
     
     allProtectedElements.forEach(el => {
-        const allowedLevels = el.getAttribute('data-level').split(',');
-        const targetLembaga = el.getAttribute('data-lembaga'); // Bisa null
+        const allowedLevels = el.getAttribute('data-level'); // String atau null
+        const targetLembaga = el.getAttribute('data-lembaga'); // String atau null
 
-        // Logika 1: Cek apakah Level/Role cocok
-        const roleCocok = allowedLevels.includes(userRole);
+        let roleCocok = true;
+        let lembagaCocok = true;
 
-        // Logika 2: Cek apakah Lembaga cocok (jika atribut data-lembaga ada)
-        let lembagaCocok = true; 
+        // 1. Cek Role (ADMIN/OPERATOR)
+        if (allowedLevels) {
+            roleCocok = allowedLevels.split(',').includes(userRole);
+        }
+
+        // 2. Cek Lembaga (YAYASAN/TPA/MDA/ALUMNI)
         if (targetLembaga) {
             const allowedLembaga = targetLembaga.split(',');
-            // ADMIN YAYASAN bisa melihat semua lembaga
+            
+            // Aturan Khusus: ADMIN YAYASAN punya kunci master untuk semua lembaga
             if (userRole === "ADMIN" && userLembaga === "YAYASAN") {
                 lembagaCocok = true;
             } else {
@@ -98,11 +104,11 @@ function filterMenuByRole(userRole, userLembaga) {
             }
         }
 
-        // Eksekusi Tampilan
+        // Eksekusi: Harus lulus kedua syarat (Role DAN Lembaga)
         if (roleCocok && lembagaCocok) {
-            el.classList.remove('hidden');
+            el.style.display = ""; // Tampilkan (gunakan default CSS)
         } else {
-            el.classList.add('hidden');
+            el.style.display = "none"; // Sembunyikan total
         }
     });
 }
