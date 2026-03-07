@@ -75,40 +75,46 @@ function startApp(userData) {
     loadPage('dashboard', 'Dashboard');
 }
 
-// --- FILTER HAK AKSES ---
-function filterMenuByRole(userRole, userLembaga) {
-    // Kita cari semua elemen yang punya aturan akses
-    const allProtectedElements = document.querySelectorAll('[data-level], [data-lembaga]');
+// Fungsi Navigasi Direct untuk Operator (Auto-Detect Lembaga)
+function loadPageDirect(type, element) {
+    const user = JSON.parse(localStorage.getItem('userSimAsbar'));
+    const lembaga = user.lembaga.toLowerCase(); // tpa, mda, atau alumni
     
-    allProtectedElements.forEach(el => {
-        const allowedLevels = el.getAttribute('data-level'); // String atau null
-        const targetLembaga = el.getAttribute('data-lembaga'); // String atau null
+    // Contoh: Jika type='surat' dan lembaga='tpa', akan load 'surat-tpa'
+    const pageTarget = `${type}-${lembaga}`;
+    const titleTarget = `${type.toUpperCase()} ${user.lembaga}`;
+    
+    loadPage(pageTarget, titleTarget, element);
+}
 
-        let roleCocok = true;
-        let lembagaCocok = true;
+// Update filterMenu agar lebih akurat
+function filterMenuByRole(userRole, userLembaga) {
+    const allProtected = document.querySelectorAll('[data-level]');
+    
+    allProtected.forEach(el => {
+        const levels = el.getAttribute('data-level').split(',');
+        const targetLembaga = el.getAttribute('data-lembaga');
 
-        // 1. Cek Role (ADMIN/OPERATOR)
-        if (allowedLevels) {
-            roleCocok = allowedLevels.split(',').includes(userRole);
-        }
+        let isLevelMatch = levels.includes(userRole);
+        let isLembagaMatch = true;
 
-        // 2. Cek Lembaga (YAYASAN/TPA/MDA/ALUMNI)
         if (targetLembaga) {
             const allowedLembaga = targetLembaga.split(',');
-            
-            // Aturan Khusus: ADMIN YAYASAN punya kunci master untuk semua lembaga
+            // Admin Yayasan tembus semua filter lembaga
             if (userRole === "ADMIN" && userLembaga === "YAYASAN") {
-                lembagaCocok = true;
+                isLembagaMatch = true;
             } else {
-                lembagaCocok = allowedLembaga.includes(userLembaga);
+                isLembagaMatch = allowedLembaga.includes(userLembaga);
             }
         }
 
-        // Eksekusi: Harus lulus kedua syarat (Role DAN Lembaga)
-        if (roleCocok && lembagaCocok) {
-            el.style.display = ""; // Tampilkan (gunakan default CSS)
+        if (isLevelMatch && isLembagaMatch) {
+            el.classList.remove('hidden');
+            // Jika element ini adalah div, jangan pakai flex agar tidak berantakan
+            if(el.tagName === 'DIV') el.style.display = 'block'; 
         } else {
-            el.style.display = "none"; // Sembunyikan total
+            el.classList.add('hidden');
+            el.style.display = 'none';
         }
     });
 }
