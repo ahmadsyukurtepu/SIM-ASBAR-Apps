@@ -2,83 +2,146 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SIM-ASBAR-Apps</title>
-    <link rel="stylesheet" href="css/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SIM-ASBAR Apps - As'adiyah Baru Orai Tempe</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css?v=1.0">
 </head>
-<body>
+<body class="flex h-screen overflow-hidden text-gray-800 bg-gray-50">
 
-    <div id="login-screen">
-        <div class="login-box">
-            <div class="login-logo">
-                <h2 style="color: var(--primary-green); margin-bottom: 5px;">SIM-ASBAR</h2>
-                <small>Yayasan As'adiyah Baru Orai Tempe</small>
+    <div id="sidebarOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/50 hidden z-[45]"></div>
+
+    <aside id="sidebar" class="bg-[#1e3d1a] h-full text-white p-4 hidden lg:flex flex-col shadow-2xl z-50 transition-all duration-300 w-64">
+        <div class="flex items-center gap-3 mb-8 px-2 mt-2">
+            <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center shadow-xl p-1 shrink-0">
+                <img src="img/logo-asbar.png" alt="Logo" class="w-full h-full object-contain">
             </div>
-            <hr>
-            <p>Silakan Login untuk Melanjutkan</p>
-            <input type="text" id="username" placeholder="Username (NIK/NIP)">
-            <input type="password" id="password" placeholder="Password">
-            <button onclick="prosesLogin()" id="btn-login">Masuk</button>
-            <p id="login-msg" style="color: red; font-size: 12px; margin-top: 10px;"></p>
+            <div class="logo-text">
+                <span class="block font-extrabold text-lg leading-none tracking-tight">SIM-ASBAR</span>
+                <span class="text-[9px] font-bold text-amber-400 tracking-[0.1em] uppercase opacity-90">ORAI TEMPE</span>
+            </div>
         </div>
-    </div>
 
-    <div id="main-app" class="hidden">
-        <div id="app">
-            <nav id="sidebar">
-                <div class="sidebar-header">
-                    <h3>SIM-ASBAR</h3>
+        <nav id="navMenu" class="flex-1 space-y-1 overflow-y-auto custom-scrollbar">
+            <a href="#" onclick="loadPage('dashboard', 'Dashboard', this)" class="nav-item flex items-center gap-3 p-3 rounded-xl hover:bg-white/10 transition-all active-link">
+                <i class="fa-solid fa-gauge-high w-5 text-amber-400"></i> 
+                <span class="text-sm font-semibold">Dashboard</span>
+            </a>
+
+            <div data-level="Lv1">
+                <a href="#" onclick="loadPage('dokumen', 'Arsip Dokumen', this)" class="nav-item flex items-center gap-3 p-3 rounded-xl hover:bg-white/10 transition-all">
+                    <i class="fa-solid fa-file-shield w-5 text-amber-400"></i> 
+                    <span class="text-sm font-semibold">Dokumen</span>
+                </a>
+            </div>
+
+            <div data-level="Lv1,Lv2,Lv3" class="space-y-1">
+                <button onclick="toggleSubMenu('sub-surat')" class="w-full flex items-center justify-between p-3 rounded-xl hover:bg-white/10 transition-all">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-envelope-open-text w-5 text-amber-400"></i>
+                        <span class="text-sm font-semibold">Persuratan</span>
+                    </div>
+                    <i class="fa-solid fa-chevron-down text-[10px]"></i>
+                </button>
+                <div id="sub-surat" class="hidden pl-10 space-y-1">
+                    <a href="#" onclick="loadPage('surat-yayasan', 'Surat Yayasan', this)" data-level="Lv1" class="block py-2 text-xs hover:text-amber-400">Pusat Yayasan</a>
+                    <a href="#" onclick="loadPage('surat-tpa', 'Surat TPA', this)" data-level="Lv1,Lv2" class="block py-2 text-xs hover:text-amber-400">Lembaga TPA</a>
+                    <a href="#" onclick="loadPage('surat-mda', 'Surat MDA', this)" data-level="Lv1,Lv2" class="block py-2 text-xs hover:text-amber-400">Lembaga MDA</a>
+                    <a href="#" onclick="loadPage('surat-alumni', 'Surat Alumni', this)" data-level="Lv1,Lv2,Lv3" class="block py-2 text-xs hover:text-amber-400">Ikatan Alumni</a>
+                </div>
+            </div>
+
+            <div data-level="Lv1,Lv2,Lv3" class="space-y-1">
+                <button onclick="toggleSubMenu('sub-keu')" class="w-full flex items-center justify-between p-3 rounded-xl hover:bg-white/10 transition-all">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-wallet w-5 text-amber-400"></i>
+                        <span class="text-sm font-semibold">Keuangan</span>
+                    </div>
+                    <i class="fa-solid fa-chevron-down text-[10px]"></i>
+                </button>
+                <div id="sub-keu" class="hidden pl-10 space-y-1">
+                    <a href="#" onclick="loadPage('keu-yayasan', 'Kas Yayasan', this)" data-level="Lv1" class="block py-2 text-xs hover:text-amber-400">Kas Yayasan</a>
+                    <a href="#" onclick="loadPage('keu-lembaga', 'Kas Lembaga', this)" data-level="Lv1,Lv2" class="block py-2 text-xs hover:text-amber-400">Kas TPA/MDA</a>
+                </div>
+            </div>
+
+            <a href="#" onclick="loadPage('santri', 'Data Santri', this)" data-level="Lv1,Lv2" class="nav-item flex items-center gap-3 p-3 rounded-xl hover:bg-white/10 transition-all">
+                <i class="fa-solid fa-user-graduate w-5 text-amber-400"></i> 
+                <span class="text-sm font-semibold">Data Santri</span>
+            </a>
+
+            <a href="#" onclick="loadPage('pegawai', 'Data Pegawai', this)" data-level="Lv1,Lv2" class="nav-item flex items-center gap-3 p-3 rounded-xl hover:bg-white/10 transition-all">
+                <i class="fa-solid fa-user-tie w-5 text-amber-400"></i> 
+                <span class="text-sm font-semibold">Data Pegawai</span>
+            </a>
+
+            <a href="#" onclick="loadPage('alumni', 'Data Alumni', this)" data-level="Lv1,Lv2,Lv3" class="nav-item flex items-center gap-3 p-3 rounded-xl hover:bg-white/10 transition-all">
+                <i class="fa-solid fa-users-viewfinder w-5 text-amber-400"></i> 
+                <span class="text-sm font-semibold">Data Alumni</span>
+            </a>
+
+            <a href="#" onclick="loadPage('galeri', 'Galeri Foto', this)" class="nav-item flex items-center gap-3 p-3 rounded-xl hover:bg-white/10 transition-all">
+                <i class="fa-solid fa-images w-5 text-amber-400"></i> 
+                <span class="text-sm font-semibold">Galeri</span>
+            </a>
+        </nav>
+    </aside>
+
+    <main id="mainApp" class="flex-1 flex flex-col hidden h-screen overflow-hidden">
+        <header class="h-20 bg-white border-b border-gray-100 flex items-center justify-between px-6 z-40">
+            <div class="flex items-center gap-4">
+                <button onclick="toggleSidebar()" class="lg:hidden w-10 h-10 flex items-center justify-center rounded-xl bg-gray-50 text-green-900">
+                    <i class="fas fa-bars-staggered"></i>
+                </button>
+                <div>
+                    <h2 id="currentMenuTitle" class="text-lg font-extrabold text-gray-900 uppercase">Dashboard</h2>
+                    <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest">Sistem Informasi Manajemen As'adiyah Baru</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-4 relative">
+                <div class="text-right hidden sm:block border-r pr-4">
+                    <span id="adminName" class="block font-bold text-sm text-gray-900 uppercase tracking-tight">-</span>
+                    <span id="adminLevelDisplay" class="text-[9px] font-black text-white bg-amber-500 px-2 py-0.5 rounded uppercase">Level</span>
+                </div>
+                <div onclick="toggleProfileMenu()" class="w-11 h-11 bg-green-900 rounded-xl flex items-center justify-center text-amber-400 shadow-lg cursor-pointer hover:scale-105 transition-transform">
+                    <i class="fas fa-user-circle text-2xl"></i>
                 </div>
                 
-                <ul class="list-unstyled components">
-                    <li onclick="loadPage('dashboard')" class="menu-item">📊 Dashboard</li>
-                    
-                    <li onclick="loadPage('dokumen')" data-role="Lv1" class="menu-item">📁 Dokumen</li>
-                    
-                    <li class="has-submenu">
-                        <span class="submenu-title">✉️ Persuratan</span>
-                        <ul class="submenu">
-                            <li onclick="loadPage('surat-yayasan')" data-role="Lv1">Persuratan YAYASAN</li>
-                            <li onclick="loadPage('surat-tpa')" data-role="Lv1,Lv2">Persuratan TPA</li>
-                            <li onclick="loadPage('surat-mda')" data-role="Lv1,Lv2">Persuratan MDA</li>
-                            <li onclick="loadPage('surat-alumni')" data-role="Lv1,Lv2,Lv3">Persuratan Alumni</li>
-                        </ul>
-                    </li>
-
-                    <li class="has-submenu" data-role="Lv1,Lv2">
-                        <span class="submenu-title">👥 Data Santri</span>
-                        <ul class="submenu">
-                            <li onclick="loadPage('santri-tpa')">Data Santri TPA</li>
-                            <li onclick="loadPage('santri-mda')">Data Santri MDA</li>
-                        </ul>
-                    </li>
-
-                    <li onclick="loadPage('pegawai')" data-role="Lv1,Lv2" class="menu-item">👔 Data Pegawai</li>
-                    <li onclick="loadPage('alumni')" data-role="Lv1,Lv2,Lv3" class="menu-item">🎓 Data Alumni</li>
-                    <li onclick="loadPage('galeri')" class="menu-item">🖼️ Galeri</li>
-                </ul>
-            </nav>
-
-            <div id="content">
-                <header class="navbar">
-                    <button type="button" id="sidebarCollapse">☰</button>
-                    <div class="user-profile-wrapper">
-                        <div class="user-info">
-                            <span id="user-name">Memuat...</span>
-                            <small id="user-role" style="display:block; font-size: 10px; color: #666;"></small>
-                        </div>
-                        <div id="profile-btn" onclick="toggleDropdownProfil()" style="cursor:pointer;">
-                            <div id="profile-icon">👤</div>
-                        </div>
-                        <div id="profile-dropdown" class="hidden">
-                            <button onclick="loadPage('profil')">Lihat Profil</button>
-                            <button onclick="logout()" style="color: red;">Keluar</button>
-                        </div>
+                <div id="profileMenu" class="absolute right-0 top-16 w-56 bg-white rounded-2xl shadow-2xl border border-gray-100 py-2 hidden z-50">
+                    <div class="px-4 py-3 border-b border-gray-50">
+                        <p class="text-[10px] font-bold text-gray-400 uppercase">Username Anda</p>
+                        <p id="displayUsername" class="font-black text-green-900 text-xs">@username</p>
                     </div>
-                </header>
-                
-                <main id="main-body">
-                    </main>
+                    <button onclick="loadPage('profil', 'Profil Saya', this)" class="w-full text-left px-4 py-2 text-xs font-bold text-gray-600 hover:bg-amber-50">
+                        <i class="fas fa-id-card-alt mr-2 text-amber-500"></i> Profil Saya
+                    </button>
+                    <hr class="my-1">
+                    <button onclick="handleLogout()" class="w-full text-left px-4 py-2 text-xs font-bold text-red-500 hover:bg-red-50">
+                        <i class="fas fa-sign-out-alt mr-2"></i> Keluar Aplikasi
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <div id="contentArea" class="flex-1 overflow-y-auto p-6 bg-[#f8fafc]">
+            </div>
+    </main>
+
+    <div id="loginOverlay" class="fixed inset-0 z-[9999] flex items-center justify-center bg-white">
+        <div class="w-full max-w-sm p-8 text-center">
+            <img src="img/logo-asbar.png" alt="Logo" class="w-32 h-32 mx-auto mb-6 drop-shadow-2xl">
+            <h3 class="text-green-900 font-black text-xl uppercase italic leading-none">SIM-ASBAR</h3>
+            <p class="text-[10px] font-bold text-amber-500 tracking-widest mt-1 mb-8">ORAI TEMPE - WAJO</p>
+            
+            <div class="space-y-4">
+                <input type="text" id="loginID" placeholder="User ID / Username" class="w-full p-4 bg-gray-50 rounded-2xl font-bold text-center border-2 border-transparent focus:border-amber-400 outline-none transition-all">
+                <input type="password" id="loginPIN" placeholder="PIN / Password" class="w-full p-4 bg-gray-50 rounded-2xl font-bold text-center border-2 border-transparent focus:border-amber-400 outline-none transition-all">
+                <button onclick="handleLogin()" id="btnLogin" class="w-full bg-green-900 text-amber-400 py-4 rounded-2xl font-black text-lg shadow-xl hover:bg-green-800 transition-all">
+                    LOG IN
+                </button>
             </div>
         </div>
     </div>
