@@ -181,14 +181,29 @@ async function deleteDoc(id) {
 // 6. MODAL CONTROL
 function toggleModalDoc(show) {
     const modal = document.getElementById('modalInputDoc');
-    if (!show) {
-        // Reset Judul ke default saat modal ditutup
-        document.getElementById('modalTitle').innerText = "Upload Dokumen";
-        document.getElementById('btnSimpanDoc').innerHTML = `<i class="fas fa-cloud-upload-alt"></i> <span>SIMPAN & UPLOAD</span>`;
-        modal.classList.replace('flex', 'hidden');
-        currentEditId = null;
-    } else {
+    const form = document.getElementById('formDoc');
+    const modalTitle = document.getElementById('modalTitle');
+    const btnSubmit = document.getElementById('btnSimpanDoc');
+
+    if (show) {
+        // Jika currentEditId kosong, berarti ini MODE INPUT BARU
+        if (!currentEditId) {
+            form.reset(); // Kosongkan semua inputan
+            modalTitle.innerText = "Upload Dokumen Baru";
+            btnSubmit.innerHTML = `<i class="fas fa-cloud-upload-alt mr-2"></i> SIMPAN & UPLOAD`;
+            document.getElementById('filePdf').required = true; // File wajib diisi
+        } else {
+            // Jika ada ID, berarti MODE EDIT (Judul diubah di fungsi editDoc)
+            modalTitle.innerText = "Edit Dokumen";
+            btnSubmit.innerHTML = `<i class="fas fa-save mr-2"></i> UPDATE DATA`;
+            document.getElementById('filePdf').required = false; // File tidak wajib saat edit
+        }
         modal.classList.replace('hidden', 'flex');
+    } else {
+        // TUTUP MODAL
+        modal.classList.replace('flex', 'hidden');
+        currentEditId = null; // Reset penanda edit
+        currentExistingUrl = null;
     }
 }
 
