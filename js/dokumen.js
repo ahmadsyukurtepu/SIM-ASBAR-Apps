@@ -135,6 +135,9 @@ async function handleSaveDoc() {
 async function editDoc(id) {
     const tableData = await fetchData('DOKUMEN_YAYASAN');
     const doc = tableData.find(item => item.id == id);
+    document.getElementById('modalTitle').innerText = "Edit Dokumen"; // Ubah judul
+    document.getElementById('btnSimpanDoc').innerHTML = `<i class="fas fa-save"></i> <span>UPDATE DATA</span>`;
+    toggleModalDoc(true);
     
     if (doc) {
         currentEditId = id;
@@ -178,16 +181,14 @@ async function deleteDoc(id) {
 // 6. MODAL CONTROL
 function toggleModalDoc(show) {
     const modal = document.getElementById('modalInputDoc');
-    const form = document.getElementById('formDoc');
-    
-    if (show) {
-        modal.classList.replace('hidden', 'flex');
-    } else {
+    if (!show) {
+        // Reset Judul ke default saat modal ditutup
+        document.getElementById('modalTitle').innerText = "Upload Dokumen";
+        document.getElementById('btnSimpanDoc').innerHTML = `<i class="fas fa-cloud-upload-alt"></i> <span>SIMPAN & UPLOAD</span>`;
         modal.classList.replace('flex', 'hidden');
-        form.reset();
         currentEditId = null;
-        currentExistingUrl = null;
-        document.getElementById('filePdf').required = true;
+    } else {
+        modal.classList.replace('hidden', 'flex');
     }
 }
 
