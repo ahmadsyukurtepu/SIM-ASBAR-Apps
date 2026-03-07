@@ -33,16 +33,17 @@ async function loadDokumenData() {
 }
 
 // 2. RENDER TABEL
+// Ganti bagian renderTable agar warna konsisten Kuning-Hijau
 function renderTable(data) {
     const tableBody = document.getElementById('tableBodyDoc');
     tableBody.innerHTML = '';
 
     data.forEach(doc => {
         const row = document.createElement('tr');
-        row.className = "hover:bg-slate-50 transition-colors";
+        row.className = "hover:bg-green-50 transition-colors"; // Hover Hijau Muda
         row.innerHTML = `
             <td class="px-6 py-4">
-                <span class="px-3 py-1 rounded-full text-[10px] font-black bg-blue-50 text-blue-600 uppercase border border-blue-100">
+                <span class="px-3 py-1 rounded-full text-[10px] font-black bg-amber-50 text-amber-600 uppercase border border-amber-100">
                     ${doc.kategori}
                 </span>
             </td>
@@ -51,16 +52,13 @@ function renderTable(data) {
             <td class="px-6 py-4 text-sm font-bold text-slate-800">${doc.judul}</td>
             <td class="px-6 py-4">
                 <div class="flex justify-center gap-2">
-                    <button onclick="previewDoc('${doc.link_file}', '${doc.judul}')" class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white transition-all shadow-sm">
+                    <button onclick="previewDoc('${doc.link_file}', '${doc.judul}')" class="w-8 h-8 rounded-lg bg-green-50 text-green-600 hover:bg-green-600 hover:text-white transition-all">
                         <i class="fas fa-eye text-xs"></i>
                     </button>
-                    <button onclick="shareWA('${doc.link_file}', '${doc.judul}')" class="w-8 h-8 rounded-lg bg-green-50 text-green-600 hover:bg-green-600 hover:text-white transition-all shadow-sm">
-                        <i class="fab fa-whatsapp text-xs"></i>
-                    </button>
-                    <button onclick="editDoc('${doc.id}')" class="w-8 h-8 rounded-lg bg-amber-50 text-amber-600 hover:bg-amber-600 hover:text-white transition-all shadow-sm">
+                    <button onclick="editDoc('${doc.id}')" class="w-8 h-8 rounded-lg bg-amber-50 text-amber-600 hover:bg-amber-600 hover:text-white transition-all">
                         <i class="fas fa-edit text-xs"></i>
                     </button>
-                    <button onclick="deleteDoc('${doc.id}')" class="w-8 h-8 rounded-lg bg-red-50 text-red-600 hover:bg-red-600 hover:text-white transition-all shadow-sm">
+                    <button onclick="deleteDoc('${doc.id}')" class="w-8 h-8 rounded-lg bg-red-50 text-red-600 hover:bg-red-600 hover:text-white transition-all">
                         <i class="fas fa-trash text-xs"></i>
                     </button>
                 </div>

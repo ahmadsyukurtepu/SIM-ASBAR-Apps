@@ -4,7 +4,7 @@
  */
 
 // Ganti dengan URL Deployment Apps Script kamu
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbytW7IpQrP622xk-rlBxK63WYRjTINAMtCegrBSZwEDmKzHjqcWycBXci-5vZzoGwqZ5Q/exec"; 
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby2XJLdt4KmcZuwZe-AV8LLDxXpy-pqsKFO1HlBYnXMItM3AdCuL-ycBdQgBzkKrbFS4g/exec"; 
 
 /**
  * Fungsi untuk mengambil data dari Google Sheets
@@ -13,22 +13,16 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbytW7IpQrP622xk-rlBx
 async function fetchData(dbKey) {
     try {
         const response = await fetch(`${SCRIPT_URL}?action=read&dbKey=${dbKey}`);
-        
-        if (!response.ok) {
-            throw new Error("Jaringan bermasalah atau URL salah.");
-        }
-
         const result = await response.json();
-
         if (result.status === "success") {
-            return result.data; // Mengembalikan array of objects (data dari sheet)
+            return result.data; // Mengembalikan array data
         } else {
-            console.error("Apps Script Error:", result.message);
-            return null;
+            console.error(result.message);
+            return [];
         }
     } catch (error) {
-        console.error("Fetch Error:", error);
-        return null;
+        console.error("Gagal koneksi API:", error);
+        return [];
     }
 }
 
