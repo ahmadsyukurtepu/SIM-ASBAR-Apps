@@ -25,68 +25,85 @@
         </div>
 
         <nav id="navMenu" class="flex-1 space-y-1 overflow-y-auto custom-scrollbar">
-            <a href="#" onclick="loadPage('dashboard', 'Dashboard', this)" class="nav-item flex items-center gap-3 p-3 rounded-xl hover:bg-white/10 transition-all active-link">
-                <i class="fa-solid fa-gauge-high w-5 text-amber-400"></i> 
-                <span class="text-sm font-semibold">Dashboard</span>
-            </a>
+    <a href="#" onclick="loadPage('dashboard', 'Dashboard', this)" class="nav-item flex items-center gap-3 p-3 rounded-xl hover:bg-white/10 transition-all">
+        <i class="fa-solid fa-gauge-high w-5 text-amber-400"></i> 
+        <span class="text-sm font-semibold">Dashboard</span>
+    </a>
 
-            <div data-level="Lv1">
-                <a href="#" onclick="loadPage('dokumen', 'Arsip Dokumen', this)" class="nav-item flex items-center gap-3 p-3 rounded-xl hover:bg-white/10 transition-all">
-                    <i class="fa-solid fa-file-shield w-5 text-amber-400"></i> 
-                    <span class="text-sm font-semibold">Dokumen</span>
-                </a>
+    <div data-level="Lv1">
+        <a href="#" onclick="loadPage('dokumen', 'Arsip Dokumen', this)" class="nav-item flex items-center gap-3 p-3 rounded-xl hover:bg-white/10 transition-all">
+            <i class="fa-solid fa-file-shield w-5 text-amber-400"></i> 
+            <span class="text-sm font-semibold">Dokumen</span>
+        </a>
+    </div>
+
+    <div data-level="Lv1,Lv2,Lv3" class="space-y-1">
+        <button onclick="toggleSubMenu('sub-surat')" class="w-full flex items-center justify-between p-3 rounded-xl hover:bg-white/10 transition-all">
+            <div class="flex items-center gap-3">
+                <i class="fa-solid fa-envelope-open-text w-5 text-amber-400"></i>
+                <span class="text-sm font-semibold">Persuratan</span>
             </div>
+            <i class="fa-solid fa-chevron-down text-[10px]"></i>
+        </button>
+        <div id="sub-surat" class="hidden pl-10 space-y-1 bg-black/10 rounded-lg py-1">
+            <a href="#" onclick="loadPage('surat-yayasan', 'Surat Yayasan', this)" data-level="Lv1" class="block py-2 text-[11px] font-medium hover:text-amber-400">Pusat Yayasan</a>
+            <a href="#" onclick="loadPage('surat-tpa', 'Surat TPA', this)" data-level="Lv1,Lv2" class="block py-2 text-[11px] font-medium hover:text-amber-400">Lembaga TPA</a>
+            <a href="#" onclick="loadPage('surat-mda', 'Surat MDA', this)" data-level="Lv1,Lv2" class="block py-2 text-[11px] font-medium hover:text-amber-400">Lembaga MDA</a>
+            <a href="#" onclick="loadPage('surat-alumni', 'Surat Alumni', this)" data-level="Lv1,Lv2,Lv3" class="block py-2 text-[11px] font-medium hover:text-amber-400">Ikatan Alumni</a>
+        </div>
+    </div>
 
-            <div data-level="Lv1,Lv2,Lv3" class="space-y-1">
-                <button onclick="toggleSubMenu('sub-surat')" class="w-full flex items-center justify-between p-3 rounded-xl hover:bg-white/10 transition-all">
-                    <div class="flex items-center gap-3">
-                        <i class="fa-solid fa-envelope-open-text w-5 text-amber-400"></i>
-                        <span class="text-sm font-semibold">Persuratan</span>
-                    </div>
-                    <i class="fa-solid fa-chevron-down text-[10px]"></i>
-                </button>
-                <div id="sub-surat" class="hidden pl-10 space-y-1">
-                    <a href="#" onclick="loadPage('surat-yayasan', 'Surat Yayasan', this)" data-level="Lv1" class="block py-2 text-xs hover:text-amber-400">Pusat Yayasan</a>
-                    <a href="#" onclick="loadPage('surat-tpa', 'Surat TPA', this)" data-level="Lv1,Lv2" class="block py-2 text-xs hover:text-amber-400">Lembaga TPA</a>
-                    <a href="#" onclick="loadPage('surat-mda', 'Surat MDA', this)" data-level="Lv1,Lv2" class="block py-2 text-xs hover:text-amber-400">Lembaga MDA</a>
-                    <a href="#" onclick="loadPage('surat-alumni', 'Surat Alumni', this)" data-level="Lv1,Lv2,Lv3" class="block py-2 text-xs hover:text-amber-400">Ikatan Alumni</a>
-                </div>
+    <div data-level="Lv1,Lv2,Lv3" class="space-y-1">
+        <button onclick="toggleSubMenu('sub-keu')" class="w-full flex items-center justify-between p-3 rounded-xl hover:bg-white/10 transition-all">
+            <div class="flex items-center gap-3">
+                <i class="fa-solid fa-wallet w-5 text-amber-400"></i>
+                <span class="text-sm font-semibold">Keuangan</span>
             </div>
+            <i class="fa-solid fa-chevron-down text-[10px]"></i>
+        </button>
+        <div id="sub-keu" class="hidden pl-10 space-y-1 bg-black/10 rounded-lg py-1">
+            <a href="#" onclick="loadPage('keu-yayasan', 'Keuangan Yayasan', this)" data-level="Lv1" class="block py-2 text-[11px] font-medium hover:text-amber-400">Keuangan YAYASAN</a>
+            <a href="#" onclick="loadPage('keu-tpa', 'Keuangan TPA', this)" data-level="Lv1,Lv2" class="block py-2 text-[11px] font-medium hover:text-amber-400">Keuangan TPA</a>
+            <a href="#" onclick="loadPage('keu-mda', 'Keuangan MDA', this)" data-level="Lv1,Lv2" class="block py-2 text-[11px] font-medium hover:text-amber-400">Keuangan MDA</a>
+            <a href="#" onclick="loadPage('keu-alumni', 'Keuangan Alumni', this)" data-level="Lv1,Lv2,Lv3" class="block py-2 text-[11px] font-medium hover:text-amber-400">Keuangan Alumni</a>
+        </div>
+    </div>
 
-            <div data-level="Lv1,Lv2,Lv3" class="space-y-1">
-                <button onclick="toggleSubMenu('sub-keu')" class="w-full flex items-center justify-between p-3 rounded-xl hover:bg-white/10 transition-all">
-                    <div class="flex items-center gap-3">
-                        <i class="fa-solid fa-wallet w-5 text-amber-400"></i>
-                        <span class="text-sm font-semibold">Keuangan</span>
-                    </div>
-                    <i class="fa-solid fa-chevron-down text-[10px]"></i>
-                </button>
-                <div id="sub-keu" class="hidden pl-10 space-y-1">
-                    <a href="#" onclick="loadPage('keu-yayasan', 'Kas Yayasan', this)" data-level="Lv1" class="block py-2 text-xs hover:text-amber-400">Kas Yayasan</a>
-                    <a href="#" onclick="loadPage('keu-lembaga', 'Kas Lembaga', this)" data-level="Lv1,Lv2" class="block py-2 text-xs hover:text-amber-400">Kas TPA/MDA</a>
-                </div>
-            </div>
-
-            <a href="#" onclick="loadPage('santri', 'Data Santri', this)" data-level="Lv1,Lv2" class="nav-item flex items-center gap-3 p-3 rounded-xl hover:bg-white/10 transition-all">
-                <i class="fa-solid fa-user-graduate w-5 text-amber-400"></i> 
+    <div data-level="Lv1,Lv2" class="space-y-1">
+        <button onclick="toggleSubMenu('sub-santri')" class="w-full flex items-center justify-between p-3 rounded-xl hover:bg-white/10 transition-all">
+            <div class="flex items-center gap-3">
+                <i class="fa-solid fa-user-graduate w-5 text-amber-400"></i>
                 <span class="text-sm font-semibold">Data Santri</span>
-            </a>
+            </div>
+            <i class="fa-solid fa-chevron-down text-[10px]"></i>
+        </button>
+        <div id="sub-santri" class="hidden pl-10 space-y-1 bg-black/10 rounded-lg py-1">
+            <a href="#" onclick="loadPage('santri-tpa', 'Data Santri TPA', this)" class="block py-2 text-[11px] font-medium hover:text-amber-400">Data Santri TPA</a>
+            <a href="#" onclick="loadPage('santri-mda', 'Data Santri MDA', this)" class="block py-2 text-[11px] font-medium hover:text-amber-400">Data Santri MDA</a>
+        </div>
+    </div>
 
-            <a href="#" onclick="loadPage('pegawai', 'Data Pegawai', this)" data-level="Lv1,Lv2" class="nav-item flex items-center gap-3 p-3 rounded-xl hover:bg-white/10 transition-all">
-                <i class="fa-solid fa-user-tie w-5 text-amber-400"></i> 
-                <span class="text-sm font-semibold">Data Pegawai</span>
-            </a>
+    <div data-level="Lv1,Lv2">
+        <a href="#" onclick="loadPage('pegawai', 'Data Pegawai', this)" class="nav-item flex items-center gap-3 p-3 rounded-xl hover:bg-white/10 transition-all">
+            <i class="fa-solid fa-user-tie w-5 text-amber-400"></i> 
+            <span class="text-sm font-semibold">Data Pegawai</span>
+        </a>
+    </div>
 
-            <a href="#" onclick="loadPage('alumni', 'Data Alumni', this)" data-level="Lv1,Lv2,Lv3" class="nav-item flex items-center gap-3 p-3 rounded-xl hover:bg-white/10 transition-all">
-                <i class="fa-solid fa-users-viewfinder w-5 text-amber-400"></i> 
-                <span class="text-sm font-semibold">Data Alumni</span>
-            </a>
+    <div data-level="Lv1,Lv2,Lv3">
+        <a href="#" onclick="loadPage('alumni', 'Data Alumni', this)" class="nav-item flex items-center gap-3 p-3 rounded-xl hover:bg-white/10 transition-all">
+            <i class="fa-solid fa-users-viewfinder w-5 text-amber-400"></i> 
+            <span class="text-sm font-semibold">Data Alumni</span>
+        </a>
+    </div>
 
-            <a href="#" onclick="loadPage('galeri', 'Galeri Foto', this)" class="nav-item flex items-center gap-3 p-3 rounded-xl hover:bg-white/10 transition-all">
-                <i class="fa-solid fa-images w-5 text-amber-400"></i> 
-                <span class="text-sm font-semibold">Galeri</span>
-            </a>
-        </nav>
+    <div data-level="Lv1,Lv2,Lv3">
+        <a href="#" onclick="loadPage('galeri', 'Galeri Kegiatan', this)" class="nav-item flex items-center gap-3 p-3 rounded-xl hover:bg-white/10 transition-all">
+            <i class="fa-solid fa-images w-5 text-amber-400"></i> 
+            <span class="text-sm font-semibold">Galeri</span>
+        </a>
+    </div>
+</nav>
     </aside>
 
     <main id="mainApp" class="flex-1 flex flex-col hidden h-screen overflow-hidden">
