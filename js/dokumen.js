@@ -3,10 +3,9 @@
  * Logika CRUD, Upload GDrive, dan Preview Dokumen
  */
 
-let currentEditId = null; // Penanda jika sedang mode edit
-let currentExistingUrl = null; // Menyimpan link file lama jika tidak ganti file saat edit
+let currentEditId = null; 
+let currentExistingUrl = null; 
 
-// Jalankan saat file ini dimuat
 (function initDokumen() {
     loadDokumenData();
     
@@ -14,15 +13,15 @@ let currentExistingUrl = null; // Menyimpan link file lama jika tidak ganti file
     if(form) {
         form.addEventListener('submit', (e) => {
             e.preventDefault();
-            handleSaveDoc(); // Fungsi terpadu untuk Save & Update
+            handleSaveDoc(); 
         });
     }
 })();
 
-// 1. AMBIL DATA DARI GSHEET
+// 1. AMBIL DATA
 async function loadDokumenData() {
     const tableBody = document.getElementById('tableBodyDoc');
-    tableBody.innerHTML = `<tr><td colspan="5" class="px-6 py-10 text-center text-slate-400"><i class="fas fa-spinner animate-spin"></i> Memuat data...</td></tr>`;
+    tableBody.innerHTML = `<tr><td colspan="5" class="px-6 py-10 text-center text-slate-400"><i class="fas fa-spinner animate-spin text-blue-500 mr-2"></i> Memuat data...</td></tr>`;
 
     const response = await fetchData('DOKUMEN_YAYASAN');
 
@@ -30,11 +29,10 @@ async function loadDokumenData() {
         tableBody.innerHTML = `<tr><td colspan="5" class="px-6 py-10 text-center text-slate-400">Tidak ada dokumen ditemukan.</td></tr>`;
         return;
     }
-
     renderTable(response);
 }
 
-// 2. TAMPILKAN DATA KE TABEL
+// 2. RENDER TABEL
 function renderTable(data) {
     const tableBody = document.getElementById('tableBodyDoc');
     tableBody.innerHTML = '';
@@ -53,16 +51,16 @@ function renderTable(data) {
             <td class="px-6 py-4 text-sm font-bold text-slate-800">${doc.judul}</td>
             <td class="px-6 py-4">
                 <div class="flex justify-center gap-2">
-                    <button onclick="previewDoc('${doc.link_file}', '${doc.judul}')" class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white transition-all shadow-sm" title="Lihat">
+                    <button onclick="previewDoc('${doc.link_file}', '${doc.judul}')" class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white transition-all shadow-sm">
                         <i class="fas fa-eye text-xs"></i>
                     </button>
-                    <button onclick="shareWA('${doc.link_file}', '${doc.judul}')" class="w-8 h-8 rounded-lg bg-green-50 text-green-600 hover:bg-green-600 hover:text-white transition-all shadow-sm" title="Share WA">
+                    <button onclick="shareWA('${doc.link_file}', '${doc.judul}')" class="w-8 h-8 rounded-lg bg-green-50 text-green-600 hover:bg-green-600 hover:text-white transition-all shadow-sm">
                         <i class="fab fa-whatsapp text-xs"></i>
                     </button>
-                    <button onclick="editDoc('${doc.id}')" class="w-8 h-8 rounded-lg bg-amber-50 text-amber-600 hover:bg-amber-600 hover:text-white transition-all shadow-sm" title="Edit">
+                    <button onclick="editDoc('${doc.id}')" class="w-8 h-8 rounded-lg bg-amber-50 text-amber-600 hover:bg-amber-600 hover:text-white transition-all shadow-sm">
                         <i class="fas fa-edit text-xs"></i>
                     </button>
-                    <button onclick="deleteDoc('${doc.id}')" class="w-8 h-8 rounded-lg bg-red-50 text-red-600 hover:bg-red-600 hover:text-white transition-all shadow-sm" title="Hapus">
+                    <button onclick="deleteDoc('${doc.id}')" class="w-8 h-8 rounded-lg bg-red-50 text-red-600 hover:bg-red-600 hover:text-white transition-all shadow-sm">
                         <i class="fas fa-trash text-xs"></i>
                     </button>
                 </div>
@@ -72,23 +70,22 @@ function renderTable(data) {
     });
 }
 
-// 3. FUNGSI SAVE (INPUT BARU & UPDATE)
+// 3. FUNGSI SAVE & UPDATE
 async function handleSaveDoc() {
     const btn = document.getElementById('btnSimpanDoc');
     const fileInput = document.getElementById('filePdf');
     const file = fileInput.files[0];
 
-    // Validasi: Jika input baru (bukan edit), file wajib ada
     if (!currentEditId && !file) return alert("Pilih file PDF terlebih dahulu!");
 
     btn.disabled = true;
-    btn.innerHTML = `<i class="fas fa-circle-notch animate-spin"></i> MENGUPLOAD...`;
+    btn.innerHTML = `<i class="fas fa-circle-notch animate-spin"></i> PROSES...`;
 
     const processRequest = async (base64Data = null) => {
         const payload = {
             action: "upload",
             dbKey: "DOKUMEN_YAYASAN",
-            id: currentEditId, // Null jika baru
+            id: currentEditId, 
             kategori: document.getElementById('kategori').value,
             nomor: document.getElementById('nomor').value,
             tanggal: document.getElementById('tanggal').value,
@@ -99,45 +96,34 @@ async function handleSaveDoc() {
         };
 
         try {
-            const response = await fetch(SCRIPT_URL, {
-                method: "POST",
-                body: JSON.stringify(payload)
-            });
+            const response = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) });
             const result = await response.json();
-            
             if (result.status === "success") {
-                alert(currentEditId ? "Dokumen Berhasil Diperbarui!" : "Dokumen Berhasil Disimpan!");
+                alert("Data Berhasil Disimpan!");
                 toggleModalDoc(false);
                 loadDokumenData();
-            } else {
-                alert("Gagal: " + result.message);
             }
         } catch (error) {
-            alert("Terjadi kesalahan jaringan/server.");
+            alert("Gagal memproses data.");
         } finally {
             btn.disabled = false;
             btn.innerHTML = `<span>SIMPAN & UPLOAD</span>`;
         }
     };
 
-    // Jika ada file baru dipilih, baca sebagai Base64
     if (file) {
         const reader = new FileReader();
-        reader.readAsDataURL(file);
         reader.onload = () => processRequest(reader.result);
+        reader.readAsDataURL(file);
     } else {
-        // Mode edit tanpa ganti file
         processRequest(null);
     }
 }
 
-// 4. FUNGSI EDIT (ISI FORM)
+// 4. FUNGSI EDIT
 async function editDoc(id) {
     const tableData = await fetchData('DOKUMEN_YAYASAN');
     const doc = tableData.find(item => item.id == id);
-    document.getElementById('modalTitle').innerText = "Edit Dokumen"; // Ubah judul
-    document.getElementById('btnSimpanDoc').innerHTML = `<i class="fas fa-save"></i> <span>UPDATE DATA</span>`;
-    toggleModalDoc(true);
     
     if (doc) {
         currentEditId = id;
@@ -148,37 +134,27 @@ async function editDoc(id) {
         document.getElementById('tanggal').value = doc.tanggal;
         document.getElementById('judul').value = doc.judul;
         
-        // File tidak wajib diisi saat edit
-        document.getElementById('filePdf').required = false; 
-        
-        toggleModalDoc(true);
+        toggleModalDoc(true); // Buka modal setelah data terisi
     }
 }
 
 // 5. FUNGSI HAPUS
 async function deleteDoc(id) {
-    if (!confirm("Apakah Anda yakin ingin menghapus dokumen ini?")) return;
-
+    if (!confirm("Hapus dokumen ini?")) return;
     try {
         const response = await fetch(SCRIPT_URL, {
             method: "POST",
-            body: JSON.stringify({
-                action: "delete",
-                dbKey: "DOKUMEN_YAYASAN",
-                id: id
-            })
+            body: JSON.stringify({ action: "delete", dbKey: "DOKUMEN_YAYASAN", id: id })
         });
         const result = await response.json();
         if (result.status === "success") {
-            alert("Dokumen terhapus!");
+            alert("Terhapus!");
             loadDokumenData();
         }
-    } catch (error) {
-        alert("Gagal menghapus data.");
-    }
+    } catch (e) { alert("Gagal menghapus."); }
 }
 
-// 6. MODAL CONTROL
+// 6. MODAL & PREVIEW
 function toggleModalDoc(show) {
     const modal = document.getElementById('modalInputDoc');
     const form = document.getElementById('formDoc');
@@ -186,23 +162,20 @@ function toggleModalDoc(show) {
     const btnSubmit = document.getElementById('btnSimpanDoc');
 
     if (show) {
-        // Jika currentEditId kosong, berarti ini MODE INPUT BARU
         if (!currentEditId) {
-            form.reset(); // Kosongkan semua inputan
+            form.reset();
             modalTitle.innerText = "Upload Dokumen Baru";
             btnSubmit.innerHTML = `<i class="fas fa-cloud-upload-alt mr-2"></i> SIMPAN & UPLOAD`;
-            document.getElementById('filePdf').required = true; // File wajib diisi
+            document.getElementById('filePdf').required = true;
         } else {
-            // Jika ada ID, berarti MODE EDIT (Judul diubah di fungsi editDoc)
             modalTitle.innerText = "Edit Dokumen";
             btnSubmit.innerHTML = `<i class="fas fa-save mr-2"></i> UPDATE DATA`;
-            document.getElementById('filePdf').required = false; // File tidak wajib saat edit
+            document.getElementById('filePdf').required = false;
         }
         modal.classList.replace('hidden', 'flex');
     } else {
-        // TUTUP MODAL
         modal.classList.replace('flex', 'hidden');
-        currentEditId = null; // Reset penanda edit
+        currentEditId = null;
         currentExistingUrl = null;
     }
 }
@@ -212,7 +185,6 @@ function previewDoc(link, title) {
     const iframe = document.getElementById('docIframe');
     document.getElementById('viewTitle').innerText = title;
     
-    // Konversi link Drive ke mode Preview
     const previewLink = link.replace('/view?usp=drivesdk', '/preview').replace('/view?usp=sharing', '/preview');
     iframe.src = previewLink;
     
@@ -229,6 +201,6 @@ function toggleModalView(show) {
 }
 
 function shareWA(link, title) {
-    const text = `*ARSIP DOKUMEN YAYASAN*\n\n*Judul:* ${title}\n*Link:* ${link}\n\n_SIM-ASBAR System_`;
+    const text = `*ARSIP DOKUMEN YAYASAN*\n\n*Judul:* ${title}\n*Link:* ${link}`;
     window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
 }
