@@ -1,17 +1,41 @@
-const API_URL = "https://script.google.com/macros/s/AKfycbwVvyAFPs2lkhXS3fbjEordrpg_ioSxG_usTv6zF4lUldSKmBcRQXEAxU615HfJ26LmtQ/exec"; // Tempel URL Web App Script di sini
+/**
+ * API.JS - SIM-ASBAR
+ * Penghubung antara Frontend dan Google Apps Script
+ */
 
+// Ganti dengan URL Deployment Apps Script kamu
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzp7hu5SsBT1VzG2Hzp_A2IPgP9NNT_alIEH5aDV3HFsgbm9mcRXbvaf5DcxRblvrHc2w/exec"; 
+
+/**
+ * Fungsi untuk mengambil data dari Google Sheets
+ * @param {string} dbKey - Nama database sesuai DATABASE_MAP di Apps Script
+ */
 async function fetchData(dbKey) {
     try {
-        const response = await fetch(`${API_URL}?action=read&dbKey=${dbKey}`);
+        const response = await fetch(`${SCRIPT_URL}?action=read&dbKey=${dbKey}`);
+        
+        if (!response.ok) {
+            throw new Error("Jaringan bermasalah atau URL salah.");
+        }
+
         const result = await response.json();
+
         if (result.status === "success") {
-            return result.data;
+            return result.data; // Mengembalikan array of objects (data dari sheet)
         } else {
-            console.error("Error API:", result.message);
+            console.error("Apps Script Error:", result.message);
             return null;
         }
     } catch (error) {
-        console.error("Gagal mengambil data:", error);
+        console.error("Fetch Error:", error);
         return null;
     }
+}
+
+/**
+ * Fungsi pembantu untuk memfilter data berdasarkan kolom tertentu
+ * Berguna untuk sinkronisasi Profil atau filter Lembaga
+ */
+function filterByValue(data, column, value) {
+    return data.filter(item => item[column] === value);
 }

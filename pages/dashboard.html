@@ -1,49 +1,49 @@
-<div class="dashboard-wrapper">
-    <div class="dashboard-header">
-        <h2 id="welcome-text">Selamat Datang di SIM-ASBAR</h2>
-        <p>Akses Manajemen Yayasan As'adiyah Baru Orai Tempe</p>
+<div class="space-y-6">
+    <div class="bg-white p-8 rounded-[30px] shadow-sm border-b-4 border-amber-400">
+        <h1 class="text-2xl font-black text-green-900 uppercase">Ringkasan Aktivitas</h1>
+        <p class="text-gray-500 text-sm">Selamat berkhidmat di Yayasan As'adiyah Baru Orai Tempe.</p>
     </div>
 
-    <section class="dashboard-stats">
-        <div class="stat-card">
-            <div class="stat-icon" style="background: var(--primary-green); color: white;">
-                <i class="fas fa-id-badge"></i>
-            </div>
-            <div class="stat-info">
-                <h3>Status Akun</h3>
-                <p id="info-level" style="font-weight: bold; color: var(--primary-green);">-</p>
-                <small id="info-lembaga">Lembaga: -</small>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-green-900 p-6 rounded-[30px] text-white shadow-lg">
+            <div class="flex justify-between items-start">
+                <div>
+                    <p class="text-[10px] font-bold text-amber-400 uppercase tracking-widest">Akses Anda</p>
+                    <h3 id="dash-role" class="text-xl font-black mt-1 uppercase">-</h3>
+                </div>
+                <i class="fas fa-shield-halved text-2xl opacity-50"></i>
             </div>
         </div>
 
-        <div class="stat-card">
-            <div class="stat-icon" style="background: var(--secondary-yellow); color: var(--primary-green);">
-                <i class="fas fa-users"></i>
-            </div>
-            <div class="stat-info">
-                <h3>Data Terdaftar</h3>
-                <p>Klik menu untuk melihat detail</p>
+        <div class="bg-white p-6 rounded-[30px] shadow-sm border border-gray-100">
+            <div class="flex justify-between items-start">
+                <div>
+                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Lembaga</p>
+                    <h3 id="dash-lembaga" class="text-xl font-black text-green-900 mt-1 uppercase">-</h3>
+                </div>
+                <i class="fas fa-university text-2xl text-amber-500"></i>
             </div>
         </div>
-    </section>
 
-    <div class="dashboard-banner">
-        <h4>Petunjuk Penggunaan:</h4>
-        <ul>
-            <li>Gunakan menu samping untuk mengakses fitur sesuai level Anda.</li>
-            <li>Pastikan koneksi internet stabil saat mengunggah dokumen.</li>
-            <li>Klik ikon profil di pojok kanan atas untuk keluar.</li>
-        </ul>
+        <div class="bg-white p-6 rounded-[30px] shadow-sm border border-gray-100">
+            <div class="flex justify-between items-start">
+                <div>
+                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Status Sistem</p>
+                    <h3 class="text-xl font-black text-green-600 mt-1 uppercase italic">ONLINE</h3>
+                </div>
+                <div class="w-3 h-3 bg-green-500 rounded-full animate-pulse mt-2"></div>
+            </div>
+        </div>
     </div>
 </div>
 
 <script>
+    // Script ini akan berjalan setiap kali dashboard dimuat
     (function() {
-        const user = JSON.parse(localStorage.getItem("userSimAsbar"));
+        const user = JSON.parse(localStorage.getItem('userSimAsbar'));
         if (user) {
-            document.getElementById("welcome-text").innerText = "Selamat Datang, " + user.nama;
-            document.getElementById("info-level").innerText = "Level Akses: " + user.role;
-            document.getElementById("info-lembaga").innerText = "Unit: " + (user.lembaga || "Yayasan");
+            document.getElementById('dash-role').innerText = user.role;
+            document.getElementById('dash-lembaga').innerText = user.lembaga || 'YAYASAN';
         }
     })();
 </script>
