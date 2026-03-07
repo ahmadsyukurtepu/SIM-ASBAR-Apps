@@ -174,8 +174,38 @@ function toggleSidebar() {
     overlay.classList.toggle('hidden');
 }
 
+/**
+ * Fungsi Toggle Submenu (Accordion Style)
+ * Menutup menu lain saat satu menu dibuka
+ */
 function toggleSubMenu(id) {
-    document.getElementById(id).classList.toggle('hidden');
+    const targetMenu = document.getElementById(id);
+    const allSubMenus = document.querySelectorAll('.menu-group div[id^="sub-"]');
+    const allChevrons = document.querySelectorAll('.menu-group i.fa-chevron-down');
+
+    // 1. Cek apakah menu yang diklik saat ini sudah terbuka atau belum
+    const isAlreadyOpen = !targetMenu.classList.contains('hidden');
+
+    // 2. Tutup SEMUA submenu yang ada dan reset rotasi ikon chevron
+    allSubMenus.forEach(menu => {
+        menu.classList.add('hidden');
+    });
+    
+    allChevrons.forEach(chevron => {
+        chevron.style.transform = "rotate(0deg)";
+    });
+
+    // 3. Jika menu yang diklik sebelumnya tertutup, maka sekarang buka
+    if (!isAlreadyOpen) {
+        targetMenu.classList.remove('hidden');
+        
+        // Putar ikon chevron pada tombol yang diklik (opsional agar lebih cantik)
+        const btnChevron = targetMenu.parentElement.querySelector('.fa-chevron-down');
+        if (btnChevron) {
+            btnChevron.style.transform = "rotate(180deg)";
+            btnChevron.style.transition = "transform 0.3s ease";
+        }
+    }
 }
 
 function toggleProfileMenu() {
