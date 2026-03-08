@@ -4,7 +4,7 @@
  */
 
 // Ganti dengan URL Deployment Apps Script kamu
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby2XJLdt4KmcZuwZe-AV8LLDxXpy-pqsKFO1HlBYnXMItM3AdCuL-ycBdQgBzkKrbFS4g/exechttps://script.google.com/macros/s/AKfycbziitgktWk1NEi0Ajt8wq8bWYihe9dddJnfjC_n1WHeolejcLrf_xFO8oDlI5rTeWHdfg/exec"; 
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzsbnY6sC4X0dYrho529F-bIOr0FVsokdim_FFqNvl-fG7PfNKRe5X3RDA69wMHBpCqXA/exec"; 
 
 /**
  * Fungsi untuk mengambil data dari Google Sheets
